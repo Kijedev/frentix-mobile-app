@@ -2,6 +2,7 @@ import "@/app/global.css";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
+import { router } from "expo-router";
 import {
   Image,
   Platform,
@@ -13,6 +14,30 @@ import {
 
 export default function Home() {
   const [isHidden, setIsHidden] = React.useState(true);
+
+  const actions = [
+    {
+      label: "Add",
+      icon: "add",
+      route: "/Action/Add/add",
+    },
+    {
+      label: "Send",
+      icon: "arrow-up",
+      route: "/Action/Send/transfer",
+    },
+    {
+      label: "Request",
+      icon: "arrow-down",
+      route: "/Action/Request/request",
+    },
+    {
+      label: "Pay Bill",
+      icon: "card",
+      route: "/Action/PayBill/pay-bill",
+    },
+  ];
+
   return (
     <ScrollView
       className="flex-1 bg-[#0C0C0C]"
@@ -112,31 +137,23 @@ export default function Home() {
 
       {/* ACTION BUTTONS */}
       <View className="flex-row justify-between mt-8 px-4">
-        {["Add", "Send", "Request", "Pay Bill"].map(
-          (item, index) => (
-            <TouchableOpacity
-              key={index}
-              className="bg-[#181818] p-4 rounded-2xl items-center flex-1 mx-1"
-            >
-              <Ionicons
-                name={
-                  index === 0
-                    ? "add"
-                    : index === 1
-                      ? "arrow-up"
-                      : index === 2
-                        ? "arrow-down"
-                        : "card"
-                }
-                size={20}
-                color="#fff"
-              />
-              <Text className="text-white text-xs mt-2">
-                {item}
-              </Text>
-            </TouchableOpacity>
-          )
-        )}
+        {actions.map((item, index) => (
+          <TouchableOpacity
+            key={index}
+            onPress={() => router.push(item.route as any)}
+            activeOpacity={0.7}
+            className="bg-[#181818] py-5 rounded-2xl items-center flex-1 mx-1"
+          >
+            <Ionicons
+              name={item.icon as any}
+              size={20}
+              color="#fff"
+            />
+            <Text className="text-white text-xs mt-2">
+              {item.label}
+            </Text>
+          </TouchableOpacity>
+        ))}
       </View>
 
       {/* RECENT TRANSACTIONS */}
