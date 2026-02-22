@@ -48,7 +48,7 @@ export default function Onboarding() {
   };
 
   return (
-    <View className="flex-1 bg-black justify-between">
+    <View className="flex-1 bg-[#0A0A0A] justify-between">
       <StatusBar style="light" />
 
       {/* SLIDER */}
@@ -99,9 +99,8 @@ export default function Onboarding() {
           ))}
         </View>
 
-        {/* SIGN UP BUTTON (GRADIENT) */}
         <TouchableOpacity
-          onPress={() => router.push("/(tabs)")}
+          onPress={() => router.push("/(auth)/register")}
           activeOpacity={0.8}
         >
           <LinearGradient
@@ -120,9 +119,8 @@ export default function Onboarding() {
           </LinearGradient>
         </TouchableOpacity>
 
-        {/* LOG IN BUTTON (OUTLINE) */}
         <TouchableOpacity
-          onPress={() => router.push("/(tabs)")}
+          onPress={() => router.push("/(auth)/login")}
           className="border border-purple-500 rounded-xl py-4 mt-4"
         >
           <Text className="text-white text-center font-medium">
