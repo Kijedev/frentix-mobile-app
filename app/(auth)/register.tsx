@@ -1,22 +1,98 @@
+import { auth } from "@/app/firebase";
 import "@/app/global.css";
+import { sendEmailVerification } from "@/app/Verification/sendEmailVerification";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import React, { useState } from "react";
 import {
-  Image,
+  Alert, Image,
   KeyboardAvoidingView,
   Platform,
   Text,
   TextInput,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
-const register = () => {
+const Register = () => {
   const [secureText, setSecureText] = useState(true);
   const [remember, setRemember] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [authError, setAuthError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+
+
+  const handleRegister = async () => {
+    setEmailError("");
+    setPasswordError("");
+    setAuthError("");
+
+    let valid = true;
+
+    // Validate email
+    if (!email) {
+      setEmailError("Email is required");
+      valid = false;
+    } else if (!email.includes("@")) {
+      setEmailError("Please enter a valid email");
+      valid = false;
+    }
+
+    // Validate password
+    if (!password) {
+      setPasswordError("Password is required");
+      valid = false;
+    } else if (password.length < 8) {
+      setPasswordError("Password must be at least 8 characters");
+      valid = false;
+    }
+
+    if (!valid) return;
+
+    try {
+      setLoading(true);
+
+      // Create user
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email.trim(),
+        password
+      );
+
+      // Send email verification
+      if (auth.currentUser) {
+        await sendEmailVerification(auth.currentUser);
+        Alert.alert(
+          "Verification Email Sent",
+          "Check your email and verify your account before logging in."
+        );
+
+        // Sign out the user so they go to login page
+        await signOut(auth);
+      }
+
+      router.replace("/(auth)/login"); // Now it will go to login
+    } catch (error: any) {
+      if (error.code === "auth/email-already-in-use") {
+        setEmailError("This email is already registered");
+      } else if (error.code === "auth/invalid-email") {
+        setEmailError("Invalid email format");
+      } else if (error.code === "auth/weak-password") {
+        setPasswordError("Password is too weak");
+      } else {
+        setAuthError(error.message);
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <SafeAreaView className="flex-1 bg-[#0A0A0A] px-6">
@@ -50,28 +126,37 @@ const register = () => {
           </View>
         </View>
 
-        <View className="mt-5">
-          <Text className="text-white mb-4">Email Address</Text>
-          <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-5">
-            <Feather name="mail" size={18} color="#fff" />
-            <TextInput
-              placeholder="Enter Your Email"
-              placeholderTextColor="#fff"
-              className="flex-1 text-white ml-3"
-            />
-          </View>
-        </View>
-
         <KeyboardAvoidingView
           behavior={Platform.OS === "ios" ? "padding" : "height"}
           className="mt-5"
         >
-          <Text className="text-white mb-4">Password</Text>
+          <View>
+            <Text className="text-white mb-4">Email Address</Text>
+            <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-5">
+              <Feather name="mail" size={18} color="#fff" />
+              <TextInput
+                placeholder="Enter Your Email"
+                onChangeText={setEmail}
+                value={email}
+                placeholderTextColor="#fff"
+                className="flex-1 text-white ml-3"
+              />
+            </View>
+            {emailError ? (
+              <Text className="text-red-500 mt-2 text-sm">
+                {emailError}
+              </Text>
+            ) : null}
+          </View>
+
+          <Text className="text-white mb-4 mt-5">Password</Text>
           <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-5">
             <Feather name="lock" size={18} color="#fff" />
             <TextInput
               placeholder="Enter Your Password"
               placeholderTextColor="#fff"
+              onChangeText={setPassword}
+              value={password}
               secureTextEntry={secureText}
               className="flex-1 text-white ml-3"
             />
@@ -83,6 +168,11 @@ const register = () => {
               />
             </TouchableOpacity>
           </View>
+          {passwordError ? (
+            <Text className="text-red-500 mt-2 text-sm">
+              {passwordError}
+            </Text>
+          ) : null}
         </KeyboardAvoidingView>
 
         <View className="flex-row justify-between items-center mt-5">
@@ -102,7 +192,12 @@ const register = () => {
           </TouchableOpacity>
         </View>
 
-        <TouchableOpacity activeOpacity={0.8} className="mt-10">
+        {authError ? (
+          <Text className="text-red-500 text-center mt-4">
+            {authError}
+          </Text>
+        ) : null}
+        <TouchableOpacity onPress={handleRegister} activeOpacity={0.8} className="mt-10">
           <LinearGradient
             colors={["#7C3AED", "#A855F7"]}
             start={{ x: 0, y: 0 }}
@@ -114,7 +209,7 @@ const register = () => {
             }}
           >
             <Text className="text-white text-center font-semibold text-base">
-              Log In
+              {loading ? "Signing up..." : "Sign up"}
             </Text>
           </LinearGradient>
         </TouchableOpacity>
@@ -160,8 +255,8 @@ const register = () => {
         </View>
 
       </View>
-    </SafeAreaView>
+    </SafeAreaView >
   );
 };
 
-export default register;
+export default Register;

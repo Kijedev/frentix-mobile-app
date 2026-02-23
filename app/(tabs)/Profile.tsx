@@ -1,8 +1,11 @@
 import { Ionicons } from '@expo/vector-icons'
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
+import { signOut } from "firebase/auth"
+import { Alert } from 'react-native'
 import React from 'react'
 import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { auth } from "../firebase"
 
 const Profile = () => {
   const profiles = [
@@ -31,12 +34,25 @@ const Profile = () => {
       icon: "help-circle-outline",
       screen: "/(tabs)/HelpCenter",
     },
-    {
-      name: "Logout",
-      icon: "log-out-outline",
-      screen: "/(tabs)/Logout",
-    },
   ]
+
+  const handleLogout = () => {
+    Alert.alert(
+      "Logout",
+      "Are you sure you want to logout?",
+      [
+        { text: "Cancel", style: "cancel" },
+        {
+          text: "Logout",
+          style: "destructive",
+          onPress: async () => {
+            await signOut(auth);
+            router.replace("/(auth)/login");
+          },
+        },
+      ]
+    );
+  };
 
 
   return (
@@ -89,7 +105,7 @@ const Profile = () => {
         </View>
       </LinearGradient>
 
-      <View className="mt-6 px-4 pb-20">
+      <View className="mt-6 px-4">
         {profiles.map((profile, index) => (
           <TouchableOpacity
             key={index}
@@ -119,6 +135,32 @@ const Profile = () => {
           </TouchableOpacity>
         ))}
       </View>
+
+      <TouchableOpacity
+        onPress={handleLogout}
+        className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center pb-20"
+      >
+        <View className="flex-row items-center">
+          <View className="bg-white/10 p-3 rounded-full mr-3">
+            <Ionicons
+              size={18}
+              color="#fff"
+              name="log-out-outline"
+            />
+          </View>
+
+          <Text className="text-white font-medium">
+            Log out
+          </Text>
+        </View>
+
+        <Ionicons
+          name="chevron-forward"
+          size={20}
+          color="#888"
+          className='bg-[#181818]/80 border border-white/5 p-2 rounded-full'
+        />
+      </TouchableOpacity>
     </ScrollView>
   )
 }

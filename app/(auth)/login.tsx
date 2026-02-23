@@ -1,7 +1,9 @@
+import { auth } from "@/app/firebase";
 import "@/app/global.css";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
     Image,
@@ -10,23 +12,65 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    View,
+    View
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Login = () => {
     const [secureText, setSecureText] = useState(true);
     const [remember, setRemember] = useState(false);
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [authError, setAuthError] = useState("");
+    const [loading, setLoading] = useState(false);
+
+    const handleLogin = async () => {
+        setEmailError("");
+        setPasswordError("");
+        setAuthError("");
+
+        let valid = true;
+
+        if (!email) {
+            setEmailError("Email is required");
+            valid = false;
+        } else if (!email.includes("@")) {
+            setEmailError("Please enter a valid email");
+            valid = false;
+        }
+
+        if (!password) {
+            setPasswordError("Password is required");
+            valid = false;
+        } else if (password.length < 8) {
+            setPasswordError("Password must be at least 8 characters");
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        try {
+            setLoading(true);
+            await signInWithEmailAndPassword(auth, email.trim(), password);
+            router.replace("/(tabs)");
+        } catch (error: any) {
+            setAuthError("Invalid email or password");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <SafeAreaView className="flex-1 bg-[#0A0A0A] px-6">
             {/* Back Button */}
-            <TouchableOpacity
+            {/* <TouchableOpacity
                 onPress={() => router.push("/(onboarding)")}
                 className="bg-[#181818] rounded-full items-center justify-center h-12 w-12 mt-4"
             >
                 <Text className="text-white text-2xl font-light">←</Text>
-            </TouchableOpacity>
+            </TouchableOpacity> */}
 
             <View className="items-center mt-20">
                 <Text className="text-white text-4xl font-bold">
@@ -37,30 +81,39 @@ const Login = () => {
                 </Text>
             </View>
 
-            <View className="mt-10 space-y-6">
-                <View>
-                    <Text className="text-white mb-4">Email Address</Text>
-                    <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-6">
-                        <Feather name="mail" size={18} color="#fff" />
-                        <TextInput
-                            placeholder="Enter Your Email"
-                            placeholderTextColor="#fff"
-                            className="flex-1 text-white ml-3"
-                        />
-                    </View>
-                </View>
-
+            <View className="mt-5 space-y-6">
                 <KeyboardAvoidingView
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
                     className="mt-5"
                 >
-                    <Text className="text-white mb-4">Password</Text>
+                    <View>
+                        <Text className="text-white mb-4">Email Address</Text>
+                        <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-6">
+                            <Feather name="mail" size={18} color="#fff" />
+                            <TextInput
+                                placeholder="Enter Your Email"
+                                onChangeText={setEmail}
+                                value={email}
+                                placeholderTextColor="#fff"
+                                className="flex-1 text-white ml-3"
+                            />
+                        </View>
+                        {emailError ? (
+                            <Text className="text-red-500 mt-2 text-sm">
+                                {emailError}
+                            </Text>
+                        ) : null}
+                    </View>
+
+                    <Text className="text-white mb-4 mt-5">Password</Text>
                     <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-6">
                         <Feather name="lock" size={18} color="#fff" />
                         <TextInput
                             placeholder="Enter Your Password"
                             placeholderTextColor="#fff"
                             secureTextEntry={secureText}
+                            value={password}
+                            onChangeText={setPassword}
                             className="flex-1 text-white ml-3"
                         />
                         <TouchableOpacity onPress={() => setSecureText(!secureText)}>
@@ -71,6 +124,11 @@ const Login = () => {
                             />
                         </TouchableOpacity>
                     </View>
+                    {passwordError ? (
+                        <Text className="text-red-500 mt-2 text-sm">
+                            {passwordError}
+                        </Text>
+                    ) : null}
                 </KeyboardAvoidingView>
 
                 <View className="flex-row justify-between items-center mt-5">
@@ -96,7 +154,17 @@ const Login = () => {
                     </TouchableOpacity>
                 </View>
 
-                <TouchableOpacity activeOpacity={0.8} className="mt-10" onPress={() => router.push("/(tabs)")}>
+                {authError ? (
+                    <Text className="text-red-500 text-center mt-4">
+                        {authError}
+                    </Text>
+                ) : null}
+                <TouchableOpacity
+                    onPress={handleLogin}
+                    activeOpacity={0.8}
+                    disabled={loading}
+                    className={`mt-10 ${loading ? "opacity-50" : ""}`}
+                >
                     <LinearGradient
                         colors={["#7C3AED", "#A855F7"]}
                         start={{ x: 0, y: 0 }}
@@ -108,7 +176,7 @@ const Login = () => {
                         }}
                     >
                         <Text className="text-white text-center font-semibold text-base">
-                            Log In
+                            {loading ? "Logging in..." : "Log In"}
                         </Text>
                     </LinearGradient>
                 </TouchableOpacity>
