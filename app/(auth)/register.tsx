@@ -1,6 +1,6 @@
 import { auth } from "@/app/firebase";
 import "@/app/global.css";
-import { sendEmailVerification } from "@/app/Verification/sendEmailVerification";
+import { sendEmailVerification } from "@/lib/sendEmailVerification";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
@@ -69,7 +69,7 @@ const Register = () => {
         await sendEmailVerification(auth.currentUser);
         Alert.alert(
           "Verification Email Sent",
-          "Check your email and verify your account before logging in."
+          "Check your email and verify your account before logging in. 🚨 If no email was received in primary inbox, check your spam folder."
         );
         await signOut(auth);
       }

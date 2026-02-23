@@ -83,11 +83,11 @@ const Profile = () => {
         style={{ borderBottomLeftRadius: Platform.OS == "ios" ? 30 : 20, borderBottomRightRadius: Platform.OS == "ios" ? 30 : 20 }}
       >
         {/* Top Row */}
-        <View className="flex-row justify-between items-center pt-20 px-5">
+        <View className="flex-row justify-between items-center pt-16 px-5">
           {/* Back Button */}
           <TouchableOpacity
             onPress={() => router.push("/(tabs)")}
-            className="bg-white/20 rounded-full items-center justify-center h-12 w-12 mt-4"
+            className="bg-black/10 rounded-full items-center justify-center h-12 w-12 mt-4"
           >
             <Text className="text-white text-2xl font-light">←</Text>
           </TouchableOpacity>
@@ -96,7 +96,7 @@ const Profile = () => {
             <Text className="text-white text-2xl font-semibold">Profile</Text>
           </View>
 
-          <TouchableOpacity className="bg-white/20 p-3 rounded-full">
+          <TouchableOpacity className="bg-black/10 p-3 rounded-full">
             <Ionicons
               name="notifications-outline"
               size={18}
@@ -106,7 +106,7 @@ const Profile = () => {
         </View>
 
         <View className="mt-6 items-center">
-          <View className='bg-white/10 p-10 h-32 w-32 rounded-full flex items-center justify-center'>
+          <View className='bg-black/10 p-10 h-32 w-32 rounded-full flex items-center justify-center'>
             <Text className="text-white text-5xl font-semibold">
               {fullName ? fullName.charAt(0).toUpperCase() : "U"}
             </Text>
@@ -157,7 +157,7 @@ const Profile = () => {
       <View className='px-4'>
         <TouchableOpacity
           onPress={handleLogout}
-          className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center mb-20"
+          className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center mb-28"
         >
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">

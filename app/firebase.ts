@@ -1,5 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+// @ts-ignore: getReactNativePersistence exists in the RN bundle 
+// but is often missing from public TypeScript definitions.
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import ReactNativeAsyncStorage from "@react-native-async-storage/async-storage";
 import { getAuth } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
@@ -11,11 +15,14 @@ const firebaseConfig = {
   projectId: "frentix-app",
   storageBucket: "frentix-app.firebasestorage.app",
   messagingSenderId: "220319376385",
-  appId: "1:220319376385:web:523a075a1dd2b6a14e0c00"
+  appId: "1:220319376385:web:523a075a1dd2b6a14e0c00",
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-export const auth = getAuth(app);
+// export const auth = getAuth(app);
+export const auth = initializeAuth(app, {
+  persistence: getReactNativePersistence(ReactNativeAsyncStorage),
+});
 
 export default app;

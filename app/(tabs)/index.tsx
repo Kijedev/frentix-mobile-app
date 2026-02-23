@@ -79,18 +79,16 @@ export default function Home() {
         className="rounded-3xl p-6"
         style={{ borderBottomLeftRadius: Platform.OS == "ios" ? 30 : 20, borderBottomRightRadius: Platform.OS == "ios" ? 30 : 20 }}
       >
-        {/* Top Row */}
         <View className="flex-row justify-between items-center pt-20 px-5">
           <View className="flex-row items-center">
             <View
-              className="h-10 w-10 rounded-full bg-white/20 items-center justify-center mr-3"
+              className="h-16 w-16 rounded-full bg-black/10 items-center justify-center mr-3"
             >
-              <Text className="text-white font-bold text-lg">
+              <Text className="text-white font-bold text-2xl">
                 {fullName ? fullName.charAt(0).toUpperCase() : "U"}
               </Text>
             </View>
 
-            {/* Greeting and Name */}
             <View>
               <Text className="text-purple-200 text-md">{getGreeting()}</Text>
               <Text className="text-white text-lg font-semibold">
@@ -99,7 +97,7 @@ export default function Home() {
             </View>
           </View>
 
-          <TouchableOpacity className="bg-white/20 p-3 rounded-full">
+          <TouchableOpacity className="bg-black/10 p-3 rounded-full">
             <Ionicons
               name="notifications-outline"
               size={18}
@@ -134,9 +132,9 @@ export default function Home() {
         </View>
 
         {/* Income / Expense */}
-        <View className="flex-row justify-between mt-6 bg-white/10" style={{ paddingHorizontal: Platform.OS == "ios" ? 20 : 10, paddingVertical: Platform.OS == "ios" ? 15 : 10, marginVertical: Platform.OS == "ios" ? 30 : 10, marginHorizontal: Platform.OS == "ios" ? 20 : 5, borderRadius: Platform.OS == "ios" ? 50 : 50 }}>
+        <View className="flex-row justify-between mt-6 bg-black/10" style={{ paddingHorizontal: Platform.OS == "ios" ? 20 : 10, paddingVertical: Platform.OS == "ios" ? 15 : 10, marginVertical: Platform.OS == "ios" ? 30 : 10, marginHorizontal: Platform.OS == "ios" ? 20 : 5, borderRadius: Platform.OS == "ios" ? 50 : 50 }}>
           <View className="flex-row items-center p-2">
-            <View className="bg-white/20 p-2 rounded-full mr-2">
+            <View className="bg-white/10 p-2 rounded-full mr-2">
               <Feather name="arrow-down" size={14} color="#fff" />
             </View>
             <View>
@@ -150,7 +148,7 @@ export default function Home() {
           </View>
 
           <View className="flex-row items-center">
-            <View className="bg-white/20 p-2 rounded-full mr-2">
+            <View className="bg-white/10 p-2 rounded-full mr-2">
               <Feather name="arrow-up" size={14} color="#fff" />
             </View>
             <View>

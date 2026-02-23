@@ -19,3 +19,4 @@ export const sendEmailVerification = async (user?: User) => {
     return { success: false, message: error.message };
   }
 };
+
