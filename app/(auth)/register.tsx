@@ -2,6 +2,7 @@ import { auth } from "@/app/firebase";
 import "@/app/global.css";
 import { sendEmailVerification } from "@/app/Verification/sendEmailVerification";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
@@ -18,6 +19,7 @@ import {
 import { SafeAreaView } from "react-native-safe-area-context";
 
 const Register = () => {
+  const [fullName, setFullName] = useState("");
   const [secureText, setSecureText] = useState(true);
   const [remember, setRemember] = useState(false);
   const [email, setEmail] = useState("");
@@ -26,8 +28,6 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [authError, setAuthError] = useState("");
   const [loading, setLoading] = useState(false);
-
-
 
   const handleRegister = async () => {
     setEmailError("");
@@ -45,7 +45,6 @@ const Register = () => {
       valid = false;
     }
 
-    // Validate password
     if (!password) {
       setPasswordError("Password is required");
       valid = false;
@@ -58,27 +57,24 @@ const Register = () => {
 
     try {
       setLoading(true);
-
-      // Create user
       const userCredential = await createUserWithEmailAndPassword(
         auth,
         email.trim(),
         password
       );
+      await AsyncStorage.setItem('userFullName', fullName);
+      await AsyncStorage.setItem('userEmail', email);
 
-      // Send email verification
       if (auth.currentUser) {
         await sendEmailVerification(auth.currentUser);
         Alert.alert(
           "Verification Email Sent",
           "Check your email and verify your account before logging in."
         );
-
-        // Sign out the user so they go to login page
         await signOut(auth);
       }
 
-      router.replace("/(auth)/login"); // Now it will go to login
+      router.replace("/(auth)/login");
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
         setEmailError("This email is already registered");
@@ -122,6 +118,8 @@ const Register = () => {
               placeholder="Enter Your Full Name"
               placeholderTextColor="#fff"
               className="flex-1 text-white ml-3"
+              value={fullName}
+              onChangeText={setFullName}
             />
           </View>
         </View>

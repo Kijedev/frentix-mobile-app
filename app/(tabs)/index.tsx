@@ -1,19 +1,48 @@
 import "@/app/global.css";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
 import { router } from "expo-router";
+import React, { useEffect, useState } from "react";
 import {
-  Image,
   Platform,
   ScrollView,
   Text,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 
 export default function Home() {
   const [isHidden, setIsHidden] = React.useState(true);
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const loadName = async () => {
+      const name = await AsyncStorage.getItem("userFullName");
+      if (name) setFullName(name);
+    };
+    loadName();
+  }, []);
+
+  useEffect(() => {
+    const loadEmail = async () => {
+      const email = await AsyncStorage.getItem("userEmail");
+      if (email) setEmail(email);
+    };
+    loadEmail();
+  }, []);
+
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour >= 5 && hour < 12) {
+      return "Good Morning ☀️";
+    } else if (hour >= 12 && hour < 18) {
+      return "Good Afternoon 🌤️";
+    } else {
+      return "Good Evening 🌙";
+    }
+  };
 
   const actions = [
     {
@@ -53,18 +82,19 @@ export default function Home() {
         {/* Top Row */}
         <View className="flex-row justify-between items-center pt-20 px-5">
           <View className="flex-row items-center">
-            <Image
-              source={{
-                uri: "https://i.pravatar.cc/150?img=3",
-              }}
-              className="h-10 w-10 rounded-full mr-3"
-            />
-            <View>
-              <Text className="text-purple-200 text-xs">
-                Welcome Back
+            <View
+              className="h-10 w-10 rounded-full bg-white/20 items-center justify-center mr-3"
+            >
+              <Text className="text-white font-bold text-lg">
+                {fullName ? fullName.charAt(0).toUpperCase() : "U"}
               </Text>
-              <Text className="text-white font-semibold">
-                Balla Daniella
+            </View>
+
+            {/* Greeting and Name */}
+            <View>
+              <Text className="text-purple-200 text-md">{getGreeting()}</Text>
+              <Text className="text-white text-lg font-semibold">
+                {fullName ? fullName : "Welcome!"}
               </Text>
             </View>
           </View>

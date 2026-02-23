@@ -1,7 +1,9 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+import "@/app/global.css";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
-import { useRef, useState } from "react";
 import { StatusBar } from "expo-status-bar";
+import LottieView from "lottie-react-native";
+import { useRef, useState } from "react";
 import {
   Dimensions,
   FlatList,
@@ -10,10 +12,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
 } from "react-native";
-import { LinearGradient } from "expo-linear-gradient";
-import "@/app/global.css";
 
 const { width } = Dimensions.get("window");
 
@@ -22,19 +21,19 @@ const slides = [
     id: "1",
     title: "Get Started!",
     subtitle: "Best Way to Manage Your Finances.",
-    image: require("@/assets/images/wallet.png"), 
+    animation: require("@/assets/images/Money.json"),
   },
   {
     id: "2",
     title: "Track Expenses",
     subtitle: "Monitor where your money goes.",
-    image: require("@/assets/images/cardholding.png"),
+    animation: require("@/assets/images/Card.json"),
   },
   {
     id: "3",
     title: "Secure Payments",
     subtitle: "Fast and safe transactions anytime.",
-    image: require("@/assets/images/atmcard.png"),
+    animation: require("@/assets/images/cardholding.png"),
   },
 ];
 
@@ -61,10 +60,7 @@ export default function Onboarding() {
         keyExtractor={(item) => item.id}
         onMomentumScrollEnd={onScrollEnd}
         renderItem={({ item }) => (
-          <View
-            style={{ width }}
-            className="items-center justify-center px-6"
-          >
+          <View style={{ width }} className="items-center justify-center px-6">
             <Text className="text-white text-5xl font-bold mt-10 text-center">
               {item.title}
             </Text>
@@ -73,10 +69,11 @@ export default function Onboarding() {
               {item.subtitle}
             </Text>
 
-            <Image
-              source={item.image}
-              resizeMode="contain"
-              className="w-96 h-96 mt-12"
+            <LottieView
+              source={item.animation}
+              autoPlay
+              loop
+              style={{ width: 300, height: 300, marginTop: 50 }}
             />
           </View>
         )}
@@ -84,17 +81,15 @@ export default function Onboarding() {
 
       {/* BOTTOM SECTION */}
       <View className="px-6 mb-12">
-
         {/* DOTS */}
         <View className="flex-row justify-center mb-8">
           {slides.map((_, index) => (
             <View
               key={index}
-              className={`h-2 rounded-full mx-1 ${
-                currentIndex === index
-                  ? "w-6 bg-purple-500"
-                  : "w-2 bg-gray-600"
-              }`}
+              className={`h-2 rounded-full mx-1 ${currentIndex === index
+                ? "w-6 bg-purple-500"
+                : "w-2 bg-gray-600"
+                }`}
             />
           ))}
         </View>
@@ -108,10 +103,7 @@ export default function Onboarding() {
             start={{ x: 0, y: 0 }}
             end={{ x: 1, y: 0 }}
             className="py-4 rounded-full"
-            style={{
-                borderRadius: 12,
-                paddingVertical: 12,
-            }}
+            style={{ borderRadius: 12, paddingVertical: 12 }}
           >
             <Text className="text-white text-center font-semibold text-base">
               Sign Up

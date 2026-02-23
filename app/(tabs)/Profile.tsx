@@ -1,13 +1,32 @@
 import { Ionicons } from '@expo/vector-icons'
+import AsyncStorage from "@react-native-async-storage/async-storage"
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
 import { signOut } from "firebase/auth"
-import { Alert } from 'react-native'
-import React from 'react'
-import { Image, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
+import { Alert, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { auth } from "../firebase"
 
 const Profile = () => {
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+
+  useEffect(() => {
+    const loadName = async () => {
+      const name = await AsyncStorage.getItem("userFullName");
+      if (name) setFullName(name);
+    };
+    loadName();
+  }, []);
+
+  useEffect(() => {
+    const loadEmail = async () => {
+      const email = await AsyncStorage.getItem("userEmail");
+      if (email) setEmail(email);
+    };
+    loadEmail();
+  }, []);
+
   const profiles = [
     {
       name: "My Account",
@@ -54,7 +73,6 @@ const Profile = () => {
     );
   };
 
-
   return (
     <ScrollView className="flex-1 bg-[#0C0C0C]">
       <LinearGradient
@@ -88,18 +106,17 @@ const Profile = () => {
         </View>
 
         <View className="mt-6 items-center">
-          <Image
-            source={{
-              uri: "https://i.pravatar.cc/150?img=3",
-            }}
-            className="h-32 w-32 rounded-full mr-3"
-          />
+          <View className='bg-white/10 p-10 h-32 w-32 rounded-full flex items-center justify-center'>
+            <Text className="text-white text-5xl font-semibold">
+              {fullName ? fullName.charAt(0).toUpperCase() : "U"}
+            </Text>
+          </View>
           <View className='mt-5 pb-10'>
             <Text className="text-white text-2xl font-semibold text-center">
-              Balla Daniella
+              {fullName ? fullName : "Welcome!"}
             </Text>
             <Text className="text-white/80 font-light text-center">
-              balladaniella@gmail.com
+              {email ? email : "Welcome!"}
             </Text>
           </View>
         </View>
@@ -136,31 +153,34 @@ const Profile = () => {
         ))}
       </View>
 
-      <TouchableOpacity
-        onPress={handleLogout}
-        className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center pb-20"
-      >
-        <View className="flex-row items-center">
-          <View className="bg-white/10 p-3 rounded-full mr-3">
-            <Ionicons
-              size={18}
-              color="#fff"
-              name="log-out-outline"
-            />
+      {/* Logout button */}
+      <View className='px-4'>
+        <TouchableOpacity
+          onPress={handleLogout}
+          className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center mb-20"
+        >
+          <View className="flex-row items-center">
+            <View className="bg-white/10 p-3 rounded-full mr-3">
+              <Ionicons
+                size={18}
+                color="#fff"
+                name="log-out-outline"
+              />
+            </View>
+
+            <Text className="text-white font-medium">
+              Log out
+            </Text>
           </View>
 
-          <Text className="text-white font-medium">
-            Log out
-          </Text>
-        </View>
-
-        <Ionicons
-          name="chevron-forward"
-          size={20}
-          color="#888"
-          className='bg-[#181818]/80 border border-white/5 p-2 rounded-full'
-        />
-      </TouchableOpacity>
+          <Ionicons
+            name="chevron-forward"
+            size={20}
+            color="#888"
+            className='bg-[#181818]/80 border border-white/5 p-2 rounded-full'
+          />
+        </TouchableOpacity>
+      </View>
     </ScrollView>
   )
 }
