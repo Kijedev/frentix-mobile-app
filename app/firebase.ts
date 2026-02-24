@@ -10,12 +10,12 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyDw1O52NrGwplBGl0bs_p6ja-nVN9SE0rA",
-  authDomain: "frentix-app.firebaseapp.com",
-  projectId: "frentix-app",
-  storageBucket: "frentix-app.firebasestorage.app",
-  messagingSenderId: "220319376385",
-  appId: "1:220319376385:web:523a075a1dd2b6a14e0c00",
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID,
 };
 
 // Initialize Firebase
