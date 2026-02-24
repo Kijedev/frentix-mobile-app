@@ -15,7 +15,6 @@
       "adaptiveIcon": {
         "backgroundColor": "#8437F9",
         "foregroundImage": "./assets/images/icon.png",
-        "backgroundImage": "./assets/images/icon.png",
         "monochromeImage": "./assets/images/icon.png"
       },
       "edgeToEdgeEnabled": true,
@@ -31,11 +30,11 @@
       [
         "expo-splash-screen",
         {
-          "backgroundColor": "#000000",
+          "backgroundColor": "#8437F9",
           "image": "./assets/images/logo.png",
           "dark": {
             "image": "./assets/images/logo.png",
-            "backgroundColor": "#000000"
+            "backgroundColor": "#8437F9"
           },
           "imageWidth": 200
         }
@@ -48,7 +47,8 @@
           "recordAudioAndroid": true
         }
       ],
-      "expo-web-browser"
+      "expo-web-browser",
+      "expo-font"
     ],
     "experiments": {
       "typedRoutes": true,

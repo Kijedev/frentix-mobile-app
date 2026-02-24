@@ -11,8 +11,7 @@ import {
   NativeSyntheticEvent,
   Text,
   TouchableOpacity,
-  View,
-} from "react-native";
+  View} from "react-native";
 
 const { width } = Dimensions.get("window");
 
@@ -61,11 +60,11 @@ export default function Onboarding() {
         onMomentumScrollEnd={onScrollEnd}
         renderItem={({ item }) => (
           <View style={{ width }} className="items-center justify-center px-6">
-            <Text className="text-white text-5xl font-bold mt-10 text-center">
+            <Text className="font-inter text-white text-5xl font-bold mt-10 text-center">
               {item.title}
             </Text>
 
-            <Text className="text-gray-400 text-center text-xl max-w-xs mt-3 text-base">
+            <Text className="font-inter text-gray-400 text-center text-xl max-w-xs mt-3 text-base">
               {item.subtitle}
             </Text>
 
@@ -105,7 +104,7 @@ export default function Onboarding() {
             className="py-4 rounded-full"
             style={{ borderRadius: 12, paddingVertical: 12 }}
           >
-            <Text className="text-white text-center font-semibold text-base">
+            <Text className="font-inter text-white text-center font-semibold text-base">
               Sign Up
             </Text>
           </LinearGradient>
@@ -115,7 +114,7 @@ export default function Onboarding() {
           onPress={() => router.push("/(auth)/login")}
           className="border border-purple-500 rounded-xl py-4 mt-4"
         >
-          <Text className="text-white text-center font-medium">
+          <Text className="font-inter text-white text-center font-medium">
             Log In
           </Text>
         </TouchableOpacity>

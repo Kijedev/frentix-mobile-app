@@ -26,17 +26,17 @@ const forgotpassword = () => {
             </TouchableOpacity>
 
             <View className="items-center mt-10">
-                <Text className="text-white text-4xl font-bold">
+                <Text className="font-inter text-white text-4xl font-bold">
                     Forgot Password?
                 </Text>
-                <Text className="text-gray-400 text-center mt-3 text-lg max-w-xs">
-                    Don't worry! enter Email Address, We'll send you reset instructions.
+                <Text className="font-inter text-gray-400 text-center mt-3 text-lg max-w-xs">
+                    Don't worry! enter your email address, we'll send you reset instructions.
                 </Text>
             </View>
 
             <View className="mt-5 space-y-6">
                 <View className="mt-5">
-                    <Text className="text-white mb-4">Email Address</Text>
+                    <Text className="font-inter text-white mb-4">Email Address</Text>
                     <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-5">
                         <Feather name="mail" size={18} color="#fff" />
                         <TextInput
@@ -58,7 +58,7 @@ const forgotpassword = () => {
                             paddingVertical: 12,
                         }}
                     >
-                        <Text className="text-white text-center font-semibold text-base">
+                        <Text className="font-inter text-white text-center font-semibold text-base">
                             Send
                         </Text>
                     </LinearGradient>

@@ -101,10 +101,10 @@ const Register = () => {
       </TouchableOpacity>
 
       <View className="items-center mt-10">
-        <Text className="text-white text-4xl font-bold">
+        <Text className="font-inter text-white text-4xl font-bold">
           Create Your Account
         </Text>
-        <Text className="text-gray-400 text-center mt-3 text-lg">
+        <Text className="font-inter text-gray-400 text-center mt-3 text-lg">
           Best Way To Manage{"\n"}Your Finances.
         </Text>
       </View>
@@ -129,7 +129,7 @@ const Register = () => {
           className="mt-5"
         >
           <View>
-            <Text className="text-white mb-4">Email Address</Text>
+            <Text className="font-inter text-white mb-4">Email Address</Text>
             <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-5">
               <Feather name="mail" size={18} color="#fff" />
               <TextInput
@@ -147,7 +147,7 @@ const Register = () => {
             ) : null}
           </View>
 
-          <Text className="text-white mb-4 mt-5">Password</Text>
+          <Text className="font-inter text-white mb-4 mt-5">Password</Text>
           <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-5">
             <Feather name="lock" size={18} color="#fff" />
             <TextInput
@@ -167,7 +167,7 @@ const Register = () => {
             </TouchableOpacity>
           </View>
           {passwordError ? (
-            <Text className="text-red-500 mt-2 text-sm">
+            <Text className="font-inter text-red-500 mt-2 text-sm">
               {passwordError}
             </Text>
           ) : null}
@@ -191,7 +191,7 @@ const Register = () => {
         </View>
 
         {authError ? (
-          <Text className="text-red-500 text-center mt-4">
+          <Text className="font-inter text-red-500 text-center mt-4">
             {authError}
           </Text>
         ) : null}
@@ -206,7 +206,7 @@ const Register = () => {
               paddingVertical: 12,
             }}
           >
-            <Text className="text-white text-center font-semibold text-base">
+            <Text className="font-inter text-white text-center font-semibold text-base">
               {loading ? "Signing up..." : "Sign up"}
             </Text>
           </LinearGradient>
@@ -214,7 +214,7 @@ const Register = () => {
 
         <View className="flex-row items-center my-6">
           <View className="flex-1 h-[1px] bg-gray-800" />
-          <Text className="text-gray-500 mx-3 text-sm">
+          <Text className="font-inter text-gray-500 mx-3 text-sm">
             Or Continue With
           </Text>
           <View className="flex-1 h-[1px] bg-gray-800" />
@@ -222,7 +222,6 @@ const Register = () => {
 
         <View className="flex-row justify-between">
           <TouchableOpacity className="flex-1 border border-gray-800 rounded-xl py-4 items-center mr-3 flex-row justify-center">
-            {/* <Ionicons name="logo-google" size={18} color="#fff" /> */}
             <Image
               source={require("@/assets/images/google.png")}
               className="w-6 h-6"
@@ -231,7 +230,6 @@ const Register = () => {
           </TouchableOpacity>
 
           <TouchableOpacity className="flex-1 border border-gray-800 rounded-xl py-4 items-center ml-3 flex-row justify-center">
-            {/* <Ionicons name="logo-apple" size={18} color="#fff" /> */}
             <Image
               source={require("@/assets/images/apple.png")}
               className="w-8 h-8"
@@ -242,11 +240,11 @@ const Register = () => {
         </View>
 
         <View className="flex-row justify-center mt-8">
-          <Text className="text-gray-400">
+          <Text className="font-inter text-gray-400">
             Have an account?{" "}
           </Text>
           <TouchableOpacity onPress={() => router.push("/(auth)/login")}>
-            <Text className="text-purple-500 font-medium">
+            <Text className="font-inter text-purple-500 font-medium">
               Login
             </Text>
           </TouchableOpacity>

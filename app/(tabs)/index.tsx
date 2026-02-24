@@ -84,14 +84,14 @@ export default function Home() {
             <View
               className="h-16 w-16 rounded-full bg-black/10 items-center justify-center mr-3"
             >
-              <Text className="text-white font-bold text-2xl">
+              <Text className="font-inter text-white font-bold text-2xl">
                 {fullName ? fullName.charAt(0).toUpperCase() : "U"}
               </Text>
             </View>
 
             <View>
-              <Text className="text-purple-200 text-md">{getGreeting()}</Text>
-              <Text className="text-white text-lg font-semibold">
+              <Text className="font-inter text-purple-200 text-md">{getGreeting()}</Text>
+              <Text className="font-inter text-white text-lg font-semibold">
                 {fullName ? fullName : "Welcome!"}
               </Text>
             </View>
@@ -107,13 +107,13 @@ export default function Home() {
         </View>
 
         <View className="mt-6 items-center">
-          <Text className="text-purple-200 text-md">
+          <Text className="font-inter text-purple-200 text-md">
             Available Balance
           </Text>
 
           {/* Amount + Eye */}
           <View className="flex-row items-center mt-2">
-            <Text className="text-white text-4xl font-bold mr-3">
+            <Text className="font-inter text-white text-4xl font-bold mr-3">
               {isHidden ? "********" : "$25,415.25"}
             </Text>
 
@@ -126,7 +126,7 @@ export default function Home() {
             </TouchableOpacity>
           </View>
 
-          <Text className="text-purple-200 text-md mt-1">
+          <Text className="font-inter text-purple-200 text-md mt-1">
             Updated 9/30/2025
           </Text>
         </View>
@@ -138,10 +138,10 @@ export default function Home() {
               <Feather name="arrow-down" size={14} color="#fff" />
             </View>
             <View>
-              <Text className="text-purple-200 text-md">
+              <Text className="font-inter text-purple-200 text-md">
                 Income
               </Text>
-              <Text className="text-white font-semibold text-xl">
+              <Text className="font-inter text-white font-semibold text-xl">
                 $90,530
               </Text>
             </View>
@@ -152,10 +152,10 @@ export default function Home() {
               <Feather name="arrow-up" size={14} color="#fff" />
             </View>
             <View>
-              <Text className="text-purple-200 text-md">
+              <Text className="font-inter text-purple-200 text-md">
                 Expense
               </Text>
-              <Text className="text-white font-semibold text-xl">
+              <Text className="font-inter text-white font-semibold text-xl">
                 $15,256
               </Text>
             </View>
@@ -177,7 +177,7 @@ export default function Home() {
               size={20}
               color="#fff"
             />
-            <Text className="text-white text-xs mt-2">
+            <Text className="font-inter text-white text-xs mt-2">
               {item.label}
             </Text>
           </TouchableOpacity>
@@ -185,12 +185,12 @@ export default function Home() {
       </View>
 
       {/* RECENT TRANSACTIONS */}
-      <View className="mt-8 mb-10 px-4">
+      <View className="mt-8 mb-20 px-4">
         <View className="flex-row justify-between items-center">
-          <Text className="text-white text-lg font-semibold">
+          <Text className="font-inter text-white text-lg font-semibold">
             Recent Transactions
           </Text>
-          <Text className="text-purple-500 text-sm">
+          <Text className="font-inter text-purple-500 text-sm">
             See All
           </Text>
         </View>
@@ -206,10 +206,10 @@ export default function Home() {
               />
             </View>
             <View>
-              <Text className="text-white font-medium">
+              <Text className="font-inter text-white font-medium">
                 Sarmistha | Work
               </Text>
-              <Text className="text-gray-400 text-xs">
+              <Text className="font-inter text-gray-400 text-xs">
                 12 Feb, 2025
               </Text>
             </View>
@@ -229,10 +229,10 @@ export default function Home() {
               />
             </View>
             <View>
-              <Text className="text-white font-medium">
+              <Text className="font-inter text-white font-medium">
                 Mocha Coffee | Food
               </Text>
-              <Text className="text-gray-400 text-xs">
+              <Text className="font-inter text-gray-400 text-xs">
                 30 Jan, 2025
               </Text>
             </View>
@@ -252,10 +252,10 @@ export default function Home() {
               />
             </View>
             <View>
-              <Text className="text-white font-medium">
+              <Text className="font-inter text-white font-medium">
                 Amazon | Subscription
               </Text>
-              <Text className="text-gray-400 text-xs">
+              <Text className="font-inter text-gray-400 text-xs">
                 28 Jan, 2025
               </Text>
             </View>
@@ -275,10 +275,10 @@ export default function Home() {
               />
             </View>
             <View>
-              <Text className="text-white font-medium">
+              <Text className="font-inter text-white font-medium">
                 Amazon | Subscription
               </Text>
-              <Text className="text-gray-400 text-xs">
+              <Text className="font-inter text-gray-400 text-xs">
                 28 Jan, 2025
               </Text>
             </View>
@@ -298,10 +298,10 @@ export default function Home() {
               />
             </View>
             <View>
-              <Text className="text-white font-medium">
+              <Text className="font-inter text-white font-medium">
                 Amazon | Subscription
               </Text>
-              <Text className="text-gray-400 text-xs">
+              <Text className="font-inter text-gray-400 text-xs">
                 28 Jan, 2025
               </Text>
             </View>

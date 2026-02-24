@@ -86,14 +86,14 @@ const Profile = () => {
         <View className="flex-row justify-between items-center pt-16 px-5">
           {/* Back Button */}
           <TouchableOpacity
-            onPress={() => router.push("/(tabs)")}
+            onPress={() => router.back()}
             className="bg-black/10 rounded-full items-center justify-center h-12 w-12 mt-4"
           >
             <Text className="text-white text-2xl font-light">←</Text>
           </TouchableOpacity>
 
           <View>
-            <Text className="text-white text-2xl font-semibold">Profile</Text>
+            <Text className="font-inter text-white text-2xl font-semibold">Profile</Text>
           </View>
 
           <TouchableOpacity className="bg-black/10 p-3 rounded-full">
@@ -107,15 +107,15 @@ const Profile = () => {
 
         <View className="mt-6 items-center">
           <View className='bg-black/10 p-10 h-32 w-32 rounded-full flex items-center justify-center'>
-            <Text className="text-white text-5xl font-semibold">
+            <Text className="font-inter text-white text-5xl font-semibold">
               {fullName ? fullName.charAt(0).toUpperCase() : "U"}
             </Text>
           </View>
           <View className='mt-5 pb-10'>
-            <Text className="text-white text-2xl font-semibold text-center">
+            <Text className="font-inter text-white text-2xl font-semibold text-center">
               {fullName ? fullName : "Welcome!"}
             </Text>
-            <Text className="text-white/80 font-light text-center">
+            <Text className="font-inter text-white/50 text-center">
               {email ? email : "Welcome!"}
             </Text>
           </View>
@@ -138,7 +138,7 @@ const Profile = () => {
                 />
               </View>
 
-              <Text className="text-white font-medium">
+              <Text className="font-inter text-white font-medium">
                 {profile.name}
               </Text>
             </View>
@@ -154,10 +154,10 @@ const Profile = () => {
       </View>
 
       {/* Logout button */}
-      <View className='px-4'>
+      <View className='px-4 mb-20'>
         <TouchableOpacity
           onPress={handleLogout}
-          className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center mb-28"
+          className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center"
         >
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
@@ -168,7 +168,7 @@ const Profile = () => {
               />
             </View>
 
-            <Text className="text-white font-medium">
+            <Text className="font-inter text-white font-medium">
               Log out
             </Text>
           </View>
