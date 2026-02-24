@@ -38,7 +38,6 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                         }
                     };
 
-                    // Check if this is the middle tab
                     const isMiddle = index === Math.floor(state.routes.length / 2);
 
                     return (
@@ -49,12 +48,10 @@ export default function CustomTabBar({ state, descriptors, navigation }: any) {
                             className="items-center justify-center flex-1"
                         >
                             {isMiddle ? (
-                                // Middle tab: always elevated, with background, no label
                                 <View className="bg-purple-600 h-16 w-16 rounded-full items-center justify-center -mt-10 shadow-lg">
                                     <Ionicons name="scan" size={28} color="#fff" />
                                 </View>
                             ) : (
-                                // Normal tabs
                                 <>
                                     <Ionicons
                                         name={icons[route.name]}

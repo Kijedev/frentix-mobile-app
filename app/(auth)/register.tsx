@@ -1,5 +1,6 @@
 import { auth } from "@/app/firebase";
 import "@/app/global.css";
+import BackBtn from "@/components/BackBtn";
 import { sendEmailVerification } from "@/lib/sendEmailVerification";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -92,13 +93,7 @@ const Register = () => {
 
   return (
     <SafeAreaView className="flex-1 bg-[#0A0A0A] px-6">
-      {/* Back Button */}
-      <TouchableOpacity
-        onPress={() => router.push("/(onboarding)")}
-        className="bg-[#181818] rounded-full items-center justify-center h-12 w-12 mt-4"
-      >
-        <Text className="text-white text-2xl font-light">←</Text>
-      </TouchableOpacity>
+      <BackBtn />
 
       <View className="items-center mt-10">
         <Text className="font-inter text-white text-4xl font-bold">

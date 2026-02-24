@@ -24,14 +24,14 @@ export default function Scan() {
   if (!permission.granted) {
     return (
       <SafeAreaView className="flex-1 bg-black items-center justify-center">
-        <Text className="text-white mb-4">
+        <Text className="text-white mb-4 font-inter text-2xl font-bold">
           Camera permission required
         </Text>
         <TouchableOpacity
           onPress={requestPermission}
           className="bg-purple-600 px-6 py-3 rounded-full"
         >
-          <Text className="text-white">Allow Camera</Text>
+          <Text className="text-white font-inter text-2xl font-bold">Allow Camera</Text>
         </TouchableOpacity>
       </SafeAreaView>
     );

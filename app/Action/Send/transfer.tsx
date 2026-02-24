@@ -1,7 +1,7 @@
+import BackBtn from "@/components/BackBtn";
 import { Ionicons } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
-import { router } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     Image,
     KeyboardAvoidingView,
@@ -16,12 +16,49 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function Transfer() {
     const [activeTab, setActiveTab] = useState<"bank" | "contact">("bank");
+    const [banks, setBanks] = useState<any[]>([]);
+    const [selectedBank, setSelectedBank] = useState("");
+    const [showBanks, setShowBanks] = useState(false);
+    const [loadingBanks, setLoadingBanks] = useState(false);
+    const [bankLogo, setBankLogo] = useState<string>("");
 
-    const banks = [
+    const bankscard = [
         { name: "Bank Card", number: "**** 0330", color: "#C4F1BE" },
         { name: "Master Card", number: "**** 5870", color: "#BDE0FE" },
         { name: "Credit Card", number: "**** 2218", color: "#E0C3FC" },
     ];
+
+    useEffect(() => {
+        const fetchBankLogo = async () => {
+            try {
+                const response = await fetch("https://supermx1.github.io/nigerian-banks-api/logos/{slug}.png");
+                const data = await response.json();
+                setBankLogo(data);
+            } catch (error) {
+                console.log("Error fetching banks:", error);
+            }
+        }
+        fetchBankLogo();
+    }, [])
+
+    useEffect(() => {
+        const fetchBanks = async () => {
+            try {
+                setLoadingBanks(true);
+                const response = await fetch(
+                    "https://supermx1.github.io/nigerian-banks-api/data.json"
+                );
+                const data = await response.json();
+                setBanks(data);
+            } catch (error) {
+                console.log("Error fetching banks:", error);
+            } finally {
+                setLoadingBanks(false);
+            }
+        };
+
+        fetchBanks();
+    }, []);
 
     return (
         <SafeAreaView className="flex-1 bg-[#0C0C0C]">
@@ -30,24 +67,18 @@ export default function Transfer() {
                 contentContainerStyle={{ paddingBottom: 40 }}
                 className="px-5"
             >
-                {/* HEADER */}
                 <View className="flex-row items-center justify-between mt-4">
-                    <TouchableOpacity onPress={(() => router.back())} className="bg-[#181818] h-10 w-10 rounded-full items-center justify-center">
-                        <Ionicons name="arrow-back" size={20} color="#fff" />
-                    </TouchableOpacity>
-
-                    <Text className="text-white text-lg font-semibold">
+                    <BackBtn />
+                    <Text className="font-inter text-white text-lg font-semibold">
                         Transfer
                     </Text>
-
                     <View className="w-10" />
                 </View>
 
-                {/* TAB SWITCH */}
                 <View className="flex-row bg-[#141414] rounded-full p-1 mt-6">
                     <TouchableOpacity
                         onPress={() => setActiveTab("bank")}
-                        className={`flex-1 py-3 rounded-full items-center ${activeTab === "bank" ? "bg-purple-600" : ""
+                        className={`font-inter flex-1 py-3 rounded-full items-center ${activeTab === "bank" ? "bg-purple-600" : ""
                             }`}
                     >
                         <Text
@@ -62,7 +93,7 @@ export default function Transfer() {
 
                     <TouchableOpacity
                         onPress={() => setActiveTab("contact")}
-                        className={`flex-1 py-3 rounded-full items-center ${activeTab === "contact" ? "bg-purple-600" : ""
+                        className={`font-inter flex-1 py-3 rounded-full items-center ${activeTab === "contact" ? "bg-purple-600" : ""
                             }`}
                     >
                         <Text
@@ -79,8 +110,8 @@ export default function Transfer() {
                 {/* BANK TAB CONTENT */}
                 {activeTab === "bank" && (
                     <>
-                        {/* SELECT BANK */}
-                        <Text className="text-white mt-6 mb-4 text-xl font-medium">
+
+                        <Text className="font-inter text-white mt-6 mb-4 text-xl font-medium">
                             Select a Bank
                         </Text>
 
@@ -88,16 +119,16 @@ export default function Transfer() {
                             horizontal
                             showsHorizontalScrollIndicator={false}
                         >
-                            {banks.map((bank, index) => (
+                            {bankscard.map((bank, index) => (
                                 <TouchableOpacity
                                     key={index}
                                     style={{ backgroundColor: bank.color }}
                                     className="rounded-2xl p-8 mr-4 w-40"
                                 >
-                                    <Text className="text-black font-semibold">
+                                    <Text className="font-inter text-black font-semibold">
                                         {bank.name}
                                     </Text>
-                                    <Text className="text-black/70 text-sm mt-1">
+                                    <Text className="font-inter text-black/70 text-sm mt-1">
                                         {bank.number}
                                     </Text>
                                 </TouchableOpacity>
@@ -105,7 +136,7 @@ export default function Transfer() {
                         </ScrollView>
 
                         {/* FORM */}
-                        <Text className="text-white mt-8 mb-4 text-xl font-medium">
+                        <Text className="font-inter text-white mt-8 mb-4 text-xl font-medium">
                             Transfer Money to
                         </Text>
 
@@ -114,21 +145,52 @@ export default function Transfer() {
                             className="mt-5"
                         >
                             <View className="space-y-4">
-                                <Text className="text-white mb-4">Bank Name</Text>
-                                <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
-                                    <Ionicons
-                                        name="person-outline"
-                                        size={18}
-                                        color="#888"
-                                    />
-                                    <TextInput
-                                        placeholder="Enter Bank Name"
-                                        placeholderTextColor="#666"
-                                        className="text-white ml-3 flex-1 py-2"
-                                    />
-                                </View>
+                                <View>
+                                    <Text className="font-inter text-white mb-4">Bank Name</Text>
+                                    <TouchableOpacity
+                                        onPress={() => setShowBanks(!showBanks)}
+                                        className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center"
+                                        style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}
+                                    >
+                                        <Ionicons
+                                            name="business-outline"
+                                            size={18}
+                                            color="#888"
+                                        />
+                                        <Text className="text-white ml-3 flex-1">
+                                            {selectedBank || "Select Bank"}
+                                        </Text>
+                                    </TouchableOpacity>
 
-                                <Text className="text-white mb-4 mt-6">Card Number</Text>
+                                    <View className="bg-[#0C0C0C] relative z-50 overflow-scroll">
+                                        {showBanks && banks.map((bank, index) => (
+                                            <TouchableOpacity
+                                                key={index}
+                                                onPress={() => {
+                                                    setSelectedBank(bank.name);
+                                                    setBankLogo(
+                                                        `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                    );
+                                                    setShowBanks(false);
+                                                }}
+                                                className="px-4 py-3 border-b border-[#2A2A2A] flex-row items-center bg-[#181818]"
+                                            >
+                                                <Image
+                                                    source={{
+                                                        uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                    }}
+                                                    className="w-8 h-8 mr-3"
+                                                    resizeMode="contain"
+                                                />
+
+                                                <Text className="text-white">
+                                                    {bank.name}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </View>
+                                </View>
+                                <Text className="font-inter text-white mb-4 mt-6">Card Number</Text>
                                 <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
                                     <Ionicons
                                         name="card-outline"
@@ -143,7 +205,7 @@ export default function Transfer() {
                                     />
                                 </View>
 
-                                <Text className="text-white mb-4 mt-6">Amount</Text>
+                                <Text className="font-inter text-white mb-4 mt-6">Amount</Text>
                                 <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
                                     <Ionicons
                                         name="cash-outline"
@@ -170,7 +232,7 @@ export default function Transfer() {
                                         paddingVertical: 12,
                                     }}
                                 >
-                                    <Text className="text-white text-center font-semibold text-base">
+                                    <Text className="font-inter text-white text-center font-semibold text-base">
                                         Transfer
                                     </Text>
                                 </LinearGradient>
@@ -183,7 +245,7 @@ export default function Transfer() {
                 {activeTab === "contact" && (
                     <>
                         {/* RECENT PAYEES */}
-                        <Text className="text-white text-xl mt-6 mb-4 font-medium">
+                        <Text className="font-inter text-white text-xl mt-6 mb-4 font-medium">
                             Recent Payees
                         </Text>
 
@@ -191,14 +253,12 @@ export default function Transfer() {
                             horizontal
                             showsHorizontalScrollIndicator={false}
                         >
-                            {/* Add Contact Card */}
-                            <TouchableOpacity className="border border-dashed border-purple-500 rounded-2xl w-20 h-24 items-center justify-center mr-4">
+                            <TouchableOpacity className="border border-dashed border-purple-500 rounded-2xl w-32 h-28 items-center justify-center mr-4">
                                 <View className="bg-purple-600/20 p-3 rounded-full">
                                     <Ionicons name="add" size={20} color="#A855F7" />
                                 </View>
                             </TouchableOpacity>
 
-                            {/* Payees */}
                             {[
                                 {
                                     name: "Kristin",
@@ -225,10 +285,10 @@ export default function Transfer() {
                                         className="h-12 w-12 rounded-full"
                                     />
                                     <View>
-                                        <Text className="text-white text-xs mt-2 font-medium">
+                                        <Text className="font-inter text-white text-xs mt-2 font-medium">
                                             {user.name}
                                         </Text>
-                                        <Text className="text-gray-400 text-xs">
+                                        <Text className="font-inter text-gray-400 text-xs">
                                             {user.amount}
                                         </Text>
                                     </View>
@@ -236,8 +296,7 @@ export default function Transfer() {
                             ))}
                         </ScrollView>
 
-                        {/* TRANSFER FORM */}
-                        <Text className="text-white text-xl mt-8 mb-4 font-medium">
+                        <Text className="font-inter text-white text-xl mt-8 mb-4 font-medium">
                             Transfer Money to
                         </Text>
 
@@ -246,21 +305,53 @@ export default function Transfer() {
                             className="mt-5"
                         >
                             <View className="space-y-4">
-                                <Text className="text-white mb-4">Bank Name</Text>
-                                <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
-                                    <Ionicons
-                                        name="person-outline"
-                                        size={18}
-                                        color="#888"
-                                    />
-                                    <TextInput
-                                        placeholder="Enter Bank Name"
-                                        placeholderTextColor="#666"
-                                        className="text-white ml-3 flex-1 py-2"
-                                    />
+                                <View>
+                                    <Text className="font-inter text-white mb-4">Bank Name</Text>
+                                    <TouchableOpacity
+                                        onPress={() => setShowBanks(!showBanks)}
+                                        className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center"
+                                        style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}
+                                    >
+                                        <Ionicons
+                                            name="business-outline"
+                                            size={18}
+                                            color="#888"
+                                        />
+                                        <Text className="text-white ml-3 flex-1">
+                                            {selectedBank || "Select Bank"}
+                                        </Text>
+                                    </TouchableOpacity>
+
+                                    <View className="bg-[#0C0C0C] relative z-50 overflow-scroll">
+                                        {showBanks && banks.map((bank, index) => (
+                                            <TouchableOpacity
+                                                key={index}
+                                                onPress={() => {
+                                                    setSelectedBank(bank.name);
+                                                    setBankLogo(
+                                                        `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                    );
+                                                    setShowBanks(false);
+                                                }}
+                                                className="px-4 py-3 border-b border-[#2A2A2A] flex-row items-center bg-[#181818]"
+                                            >
+                                                <Image
+                                                    source={{
+                                                        uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                    }}
+                                                    className="w-8 h-8 mr-3"
+                                                    resizeMode="contain"
+                                                />
+
+                                                <Text className="text-white">
+                                                    {bank.name}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        ))}
+                                    </View>
                                 </View>
 
-                                <Text className="text-white mb-4 mt-6">Card Number</Text>
+                                <Text className="font-inter text-white mb-4 mt-6">Card Number</Text>
                                 <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
                                     <Ionicons
                                         name="card-outline"
@@ -275,7 +366,7 @@ export default function Transfer() {
                                     />
                                 </View>
 
-                                <Text className="text-white mb-4 mt-6">Amount</Text>
+                                <Text className="font-inter text-white mb-4 mt-6">Amount</Text>
                                 <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
                                     <Ionicons
                                         name="cash-outline"
@@ -302,7 +393,7 @@ export default function Transfer() {
                                         paddingVertical: 12,
                                     }}
                                 >
-                                    <Text className="text-white text-center font-semibold text-base">
+                                    <Text className="font-inter text-white text-center font-semibold text-base">
                                         Transfer
                                     </Text>
                                 </LinearGradient>

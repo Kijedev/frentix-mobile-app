@@ -95,7 +95,7 @@ const Login = () => {
                                 onChangeText={setEmail}
                                 value={email}
                                 placeholderTextColor="#fff"
-                                className="flex-1 text-white ml-3"
+                                className="flex-1 font-inter text-white ml-3"
                             />
                         </View>
                         {emailError ? (
@@ -114,7 +114,7 @@ const Login = () => {
                             secureTextEntry={secureText}
                             value={password}
                             onChangeText={setPassword}
-                            className="flex-1 text-white ml-3"
+                            className="flex-1 font-inter text-white ml-3"
                         />
                         <TouchableOpacity onPress={() => setSecureText(!secureText)}>
                             <Ionicons
