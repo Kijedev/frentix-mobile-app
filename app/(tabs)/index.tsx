@@ -48,7 +48,7 @@ export default function Home() {
     {
       label: "Add",
       icon: "add",
-      route: "/Action/Add/add",
+      route: "/Action/Add/Add",
     },
     {
       label: "Send",
@@ -73,18 +73,18 @@ export default function Home() {
       showsVerticalScrollIndicator={false}
     >
       <LinearGradient
-        colors={["#8437F9", "#7C3AED", "#8437F9"]}
+        colors={["#8437F9", "#734cb7ff", "#8437F9"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         className="rounded-3xl p-6"
         style={{ borderBottomLeftRadius: Platform.OS == "ios" ? 30 : 20, borderBottomRightRadius: Platform.OS == "ios" ? 30 : 20 }}
       >
-        <View className="flex-row justify-between items-center pt-20 px-5">
+        <View className="flex-row justify-between items-center pt-20 px-0">
           <View className="flex-row items-center">
             <View
               className="h-16 w-16 rounded-full bg-black/10 items-center justify-center mr-3"
             >
-              <Text className="font-inter text-white font-bold text-2xl">
+              <Text className="font-inter text-white font-semibold text-2xl">
                 {fullName ? fullName.charAt(0).toUpperCase() : "U"}
               </Text>
             </View>
@@ -114,7 +114,7 @@ export default function Home() {
           {/* Amount + Eye */}
           <View className="flex-row items-center mt-2">
             <Text className="font-inter text-white text-4xl font-bold mr-3">
-              {isHidden ? "********" : "$25,415.25"}
+              {isHidden ? "********" : "$0.00"}
             </Text>
 
             <TouchableOpacity onPress={() => setIsHidden(!isHidden)}>
@@ -127,7 +127,7 @@ export default function Home() {
           </View>
 
           <Text className="font-inter text-purple-200 text-md mt-1">
-            Updated 9/30/2025
+            Updated {new Date().toLocaleDateString()}
           </Text>
         </View>
 
@@ -138,25 +138,25 @@ export default function Home() {
               <Feather name="arrow-down" size={14} color="#fff" />
             </View>
             <View>
-              <Text className="font-inter text-purple-200 text-md">
+              <Text className="font-inter text-white/50 text-md">
                 Income
               </Text>
               <Text className="font-inter text-white font-semibold text-xl">
-                $90,530
+                $0.00
               </Text>
             </View>
           </View>
 
-          <View className="flex-row items-center">
+          <View className="flex-row items-center mr-4">
             <View className="bg-white/10 p-2 rounded-full mr-2">
               <Feather name="arrow-up" size={14} color="#fff" />
             </View>
             <View>
-              <Text className="font-inter text-purple-200 text-md">
+              <Text className="font-inter text-white/50 text-md">
                 Expense
               </Text>
               <Text className="font-inter text-white font-semibold text-xl">
-                $15,256
+                $0.00
               </Text>
             </View>
           </View>

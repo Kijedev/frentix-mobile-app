@@ -65,6 +65,7 @@ const Register = () => {
       );
       await AsyncStorage.setItem('userFullName', fullName);
       await AsyncStorage.setItem('userEmail', email);
+      await AsyncStorage.setItem("hasAccount", "true");
 
       if (auth.currentUser) {
         await sendEmailVerification(auth.currentUser);

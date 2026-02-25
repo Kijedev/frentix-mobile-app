@@ -76,14 +76,14 @@ const Profile = () => {
   return (
     <ScrollView className="flex-1 bg-[#0C0C0C]">
       <LinearGradient
-        colors={["#8437F9", "#7C3AED", "#8437F9"]}
+        colors={["#8437F9", "#734cb7ff", "#8437F9"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         className="rounded-3xl p-6"
         style={{ borderBottomLeftRadius: Platform.OS == "ios" ? 30 : 20, borderBottomRightRadius: Platform.OS == "ios" ? 30 : 20 }}
       >
         {/* Top Row */}
-        <View className="flex-row justify-between items-center pt-16 px-5">
+        <View className="flex-row justify-between items-center pt-16 px-0">
           {/* Back Button */}
           <TouchableOpacity
             onPress={() => router.back()}
@@ -138,7 +138,7 @@ const Profile = () => {
                 />
               </View>
 
-              <Text className="font-inter text-white font-medium">
+              <Text className="font-inter text-white">
                 {profile.name}
               </Text>
             </View>

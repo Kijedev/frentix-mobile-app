@@ -3,13 +3,15 @@ import "@/app/global.css";
 import BackBtn from "@/components/BackBtn";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
+import { router } from "expo-router";
 import { sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
 import {
+    Alert,
     Text,
     TextInput,
     TouchableOpacity,
-    View
+    View,
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 
@@ -39,7 +41,8 @@ const forgotpassword = () => {
             setLoading(true);
             await sendPasswordResetEmail(auth, email.trim());
 
-            setSuccessMessage("Password reset link sent to your email.");
+            Alert.alert("Success", "Password reset link sent to your email.");
+            router.push("/(auth)/login");
         } catch (error: any) {
             setEmailError("No account found with this email.");
         } finally {
