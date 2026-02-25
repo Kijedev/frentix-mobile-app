@@ -6,6 +6,7 @@ import { Stack } from 'expo-router';
 import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
+import { TransactionProvider } from './context/TransactionContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -48,22 +49,24 @@ export default function RootLayout() {
 
     return (
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-            <Stack
-                screenOptions={{
-                    headerShown: false,
-                }}
-            >
-                {!hasAccount ? (
-                    <Stack.Screen name="(onboarding)" />
-                ) : (
-                    <>
-                        <Stack.Screen name="(tabs)" />
-                        <Stack.Screen name="(auth)" />
-                    </>
-                )}
+            <TransactionProvider>
+                <Stack
+                    screenOptions={{
+                        headerShown: false,
+                    }}
+                >
+                    {!hasAccount ? (
+                        <Stack.Screen name="(onboarding)" />
+                    ) : (
+                        <>
+                            <Stack.Screen name="(tabs)" />
+                            <Stack.Screen name="(auth)" />
+                        </>
+                    )}
 
-                <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-            </Stack>
+                    <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+                </Stack>
+            </TransactionProvider>
 
             <StatusBar style="light" />
         </ThemeProvider>

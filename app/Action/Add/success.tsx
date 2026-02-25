@@ -10,7 +10,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 
 export default function SuccessScreen() {
     return (
-        <SafeAreaView className="flex-1 bg-black px-6 justify-center">
+        <SafeAreaView className="flex-1 bg-[#0C0C0C] px-6 justify-center">
             <View className="items-center">
 
                 {/* Icon Circle */}

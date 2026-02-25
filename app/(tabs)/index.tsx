@@ -1,3 +1,4 @@
+import { useTransactions } from "@/app/context/TransactionContext";
 import "@/app/global.css";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -16,6 +17,7 @@ export default function Home() {
   const [isHidden, setIsHidden] = React.useState(true);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const { transactions } = useTransactions();
 
   useEffect(() => {
     const loadName = async () => {
@@ -73,13 +75,13 @@ export default function Home() {
       showsVerticalScrollIndicator={false}
     >
       <LinearGradient
-        colors={["#8437F9", "#734cb7ff", "#8437F9"]}
+        colors={["#722cebff", "#8c4ee9ff", "#722cebff", "#8c4ee9ff"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         className="rounded-3xl p-6"
         style={{ borderBottomLeftRadius: Platform.OS == "ios" ? 30 : 20, borderBottomRightRadius: Platform.OS == "ios" ? 30 : 20 }}
       >
-        <View className="flex-row justify-between items-center pt-20 px-0">
+        <View className="flex-row justify-between items-center pt-20 px-4">
           <View className="flex-row items-center">
             <View
               className="h-16 w-16 rounded-full bg-black/10 items-center justify-center mr-3"
@@ -195,8 +197,37 @@ export default function Home() {
           </Text>
         </View>
 
+        <View className="mt-4">
+          {transactions.map((tx) => (
+            <View
+              key={tx.id}
+              className="bg-[#1C1C1E] p-4 rounded-2xl mb-3 flex-row justify-between items-center"
+            >
+              <View className="flex-row gap-2 items-center">
+                <Ionicons
+                  name="wallet-outline"
+                  size={18}
+                  color="#fff"
+                  className="bg-white/10 p-3 rounded-full"
+                />
+                <View>
+                  <Text className="text-white font-semibold">
+                    {tx.name}
+                  </Text>
+                  <Text className="text-gray-400 text-sm">
+                    {tx.note || "Transfer"}
+                  </Text>
+                </View>
+              </View>
+              <Text className="text-red-500 font-semibold">
+                -${Number(tx.amount).toLocaleString()}
+              </Text>
+            </View>
+          ))}
+        </View>
+
         {/* Transaction Item */}
-        <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
+        <View className="bg-[#181818] rounded-2xl p-4 mt-1 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
               <Ionicons

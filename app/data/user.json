@@ -1,0 +1,22 @@
+{
+  "users": [
+    {
+      "id": "1",
+      "name": "Savannah Nguyen",
+      "account": "**** 5688",
+      "image": "https://i.pravatar.cc/150?img=32"
+    },
+    {
+      "id": "2",
+      "name": "Devon Lane",
+      "account": "**** 7510",
+      "image": "https://i.pravatar.cc/150?img=12"
+    },
+    {
+      "id": "3",
+      "name": "Cameron Williamson",
+      "account": "**** 9012",
+      "image": "https://i.pravatar.cc/150?img=45"
+    }
+  ]
+}
