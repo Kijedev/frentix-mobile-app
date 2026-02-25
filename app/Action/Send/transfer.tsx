@@ -147,49 +147,49 @@ export default function Transfer() {
                             <View className="space-y-4">
                                 <View>
                                     <Text className="font-inter text-white mb-4">Bank Name</Text>
+                                    {/* Bank dropdown button */}
                                     <TouchableOpacity
                                         onPress={() => setShowBanks(!showBanks)}
                                         className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center"
                                         style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}
                                     >
-                                        <Ionicons
-                                            name="business-outline"
-                                            size={18}
-                                            color="#888"
-                                        />
-                                        <Text className="text-white ml-3 flex-1">
-                                            {selectedBank || "Select Bank"}
-                                        </Text>
+                                        <Ionicons name="business-outline" size={18} color="#888" />
+                                        <Text className="text-white ml-3 flex-1">{selectedBank || "Select Bank"}</Text>
                                     </TouchableOpacity>
 
-                                    <View className="bg-[#0C0C0C] relative z-50 overflow-scroll">
-                                        {showBanks && banks.map((bank, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                onPress={() => {
-                                                    setSelectedBank(bank.name);
-                                                    setBankLogo(
-                                                        `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
-                                                    );
-                                                    setShowBanks(false);
-                                                }}
-                                                className="px-4 py-3 border-b border-[#2A2A2A] flex-row items-center bg-[#181818]"
-                                            >
-                                                <Image
-                                                    source={{
-                                                        uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
-                                                    }}
-                                                    className="w-8 h-8 mr-3"
-                                                    resizeMode="contain"
-                                                />
-
-                                                <Text className="text-white">
-                                                    {bank.name}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
+                                    {showBanks && (
+                                        <View
+                                            className="bg-[#0C0C0C] rounded-xl mt-2 absolute z-50 top-[90%] w-full"
+                                            style={{ maxHeight: 200 }}
+                                        >
+                                            <ScrollView showsVerticalScrollIndicator={true}>
+                                                {banks.map((bank, index) => (
+                                                    <TouchableOpacity
+                                                        key={index}
+                                                        onPress={() => {
+                                                            setSelectedBank(bank.name);
+                                                            setBankLogo(
+                                                                `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                            );
+                                                            setShowBanks(false);
+                                                        }}
+                                                        className="px-4 py-3 border-b border-[#2A2A2A] flex-row items-center bg-[#181818]"
+                                                    >
+                                                        <Image
+                                                            source={{
+                                                                uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`,
+                                                            }}
+                                                            className="w-8 h-8 mr-3"
+                                                            resizeMode="contain"
+                                                        />
+                                                        <Text className="text-white">{bank.name}</Text>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </ScrollView>
+                                        </View>
+                                    )}
                                 </View>
+
                                 <Text className="font-inter text-white mb-4 mt-6">Card Number</Text>
                                 <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
                                     <Ionicons
@@ -307,48 +307,47 @@ export default function Transfer() {
                             <View className="space-y-4">
                                 <View>
                                     <Text className="font-inter text-white mb-4">Bank Name</Text>
+                                    {/* Bank dropdown button */}
                                     <TouchableOpacity
                                         onPress={() => setShowBanks(!showBanks)}
                                         className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center"
                                         style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}
                                     >
-                                        <Ionicons
-                                            name="business-outline"
-                                            size={18}
-                                            color="#888"
-                                        />
-                                        <Text className="text-white ml-3 flex-1">
-                                            {selectedBank || "Select Bank"}
-                                        </Text>
+                                        <Ionicons name="business-outline" size={18} color="#888" />
+                                        <Text className="text-white ml-3 flex-1">{selectedBank || "Select Bank"}</Text>
                                     </TouchableOpacity>
 
-                                    <View className="bg-[#0C0C0C] relative z-50 overflow-scroll">
-                                        {showBanks && banks.map((bank, index) => (
-                                            <TouchableOpacity
-                                                key={index}
-                                                onPress={() => {
-                                                    setSelectedBank(bank.name);
-                                                    setBankLogo(
-                                                        `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
-                                                    );
-                                                    setShowBanks(false);
-                                                }}
-                                                className="px-4 py-3 border-b border-[#2A2A2A] flex-row items-center bg-[#181818]"
-                                            >
-                                                <Image
-                                                    source={{
-                                                        uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
-                                                    }}
-                                                    className="w-8 h-8 mr-3"
-                                                    resizeMode="contain"
-                                                />
-
-                                                <Text className="text-white">
-                                                    {bank.name}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        ))}
-                                    </View>
+                                    {showBanks && (
+                                        <View
+                                            className="bg-[#0C0C0C] rounded-xl mt-2 absolute z-50 top-[90%] w-full"
+                                            style={{ maxHeight: 200 }}
+                                        >
+                                            <ScrollView showsVerticalScrollIndicator={true}>
+                                                {banks.map((bank, index) => (
+                                                    <TouchableOpacity
+                                                        key={index}
+                                                        onPress={() => {
+                                                            setSelectedBank(bank.name);
+                                                            setBankLogo(
+                                                                `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                            );
+                                                            setShowBanks(false);
+                                                        }}
+                                                        className="px-4 py-3 border-b border-[#2A2A2A] flex-row items-center bg-[#181818]"
+                                                    >
+                                                        <Image
+                                                            source={{
+                                                                uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`,
+                                                            }}
+                                                            className="w-8 h-8 mr-3"
+                                                            resizeMode="contain"
+                                                        />
+                                                        <Text className="text-white">{bank.name}</Text>
+                                                    </TouchableOpacity>
+                                                ))}
+                                            </ScrollView>
+                                        </View>
+                                    )}
                                 </View>
 
                                 <Text className="font-inter text-white mb-4 mt-6">Card Number</Text>

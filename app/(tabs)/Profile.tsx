@@ -6,6 +6,7 @@ import { signOut } from "firebase/auth"
 import React, { useEffect, useState } from 'react'
 import { Alert, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { auth } from "../firebase"
+import ProfileAvatar from '@/components/ProfileAvatar'
 
 const Profile = () => {
   const [fullName, setFullName] = useState("");
@@ -31,27 +32,27 @@ const Profile = () => {
     {
       name: "My Account",
       icon: "person-outline",
-      screen: "/(tabs)/Profile",
+      screen: "/ProfileScreens/AccountScreen",
     },
     {
       name: "My Cards",
       icon: "card-outline",
-      screen: "/(tabs)/Cards",
+      screen: "/ProfileScreens/Cards",
     },
     {
       name: "Settings",
       icon: "settings-outline",
-      screen: "/(tabs)/Settings",
+      screen: "/ProfileScreens/Settings",
     },
     {
       name: "Change Password",
       icon: "lock-closed-outline",
-      screen: "/(tabs)/ChangePassword",
+      screen: "/ProfileScreens/ChangePassword",
     },
     {
       name: "Help Center",
       icon: "help-circle-outline",
-      screen: "/(tabs)/HelpCenter",
+      screen: "/ProfileScreens/HelpCenter",
     },
   ]
 
@@ -76,13 +77,12 @@ const Profile = () => {
   return (
     <ScrollView className="flex-1 bg-[#0C0C0C]">
       <LinearGradient
-        colors={["#722cebff", "#8c4ee9ff", "#722cebff", "#8c4ee9ff2cebff", "#8437F9"]}
+        colors={["#722cebff", "#8c4ee9ff", "#722cebff", "#8c4ee9ff", "#8437F9"]}
         start={{ x: 0, y: 0 }}
         end={{ x: 1, y: 1 }}
         className="rounded-3xl p-6"
         style={{ borderBottomLeftRadius: Platform.OS == "ios" ? 30 : 20, borderBottomRightRadius: Platform.OS == "ios" ? 30 : 20 }}
       >
-        {/* Top Row */}
         <View className="flex-row justify-between items-center pt-20 px-5">
           {/* Back Button */}
           <TouchableOpacity
@@ -106,11 +106,7 @@ const Profile = () => {
         </View>
 
         <View className="mt-6 items-center">
-          <View className='bg-black/10 p-10 h-32 w-32 rounded-full flex items-center justify-center'>
-            <Text className="font-inter text-white text-5xl font-semibold">
-              {fullName ? fullName.charAt(0).toUpperCase() : "U"}
-            </Text>
-          </View>
+          <ProfileAvatar fullName={fullName} />
           <View className='mt-5 pb-10'>
             <Text className="font-inter text-white text-2xl font-semibold text-center">
               {fullName ? fullName : "Welcome!"}

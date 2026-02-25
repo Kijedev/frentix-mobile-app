@@ -20,19 +20,19 @@ const slides = [
     id: "1",
     title: "Get Started!",
     subtitle: "Best Way to Manage Your Finances.",
-    animation: require("@/assets/Lottie/Money.json"),
+    animation: require("@/assets/Lottie/Card.json"),
   },
   {
     id: "2",
     title: "Track Expenses",
     subtitle: "Monitor where your money goes.",
-    animation: require("@/assets/Lottie/Card.json"),
+    animation: require("@/assets/Lottie/Money.json"),
   },
   {
     id: "3",
     title: "Secure Payments",
     subtitle: "Fast and safe transactions anytime.",
-    animation: require("@/assets/images/cardholding.png"),
+    animation: require("@/assets/Lottie/Payment.json"),
   },
 ];
 

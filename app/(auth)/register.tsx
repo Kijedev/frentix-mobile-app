@@ -66,6 +66,7 @@ const Register = () => {
       await AsyncStorage.setItem('userFullName', fullName);
       await AsyncStorage.setItem('userEmail', email);
       await AsyncStorage.setItem("hasAccount", "true");
+      await AsyncStorage.setItem("balance", "0");
 
       if (auth.currentUser) {
         await sendEmailVerification(auth.currentUser);
@@ -75,6 +76,8 @@ const Register = () => {
         );
         await signOut(auth);
       }
+
+
 
       router.replace("/(auth)/login");
     } catch (error: any) {

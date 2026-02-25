@@ -1,23 +1,39 @@
 import { useTransactions } from "@/app/context/TransactionContext";
 import "@/app/global.css";
+import ProfileHint from "@/components/ProfileHint";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
+  Image,
   Platform,
   ScrollView,
   Text,
   TouchableOpacity,
   View
 } from "react-native";
+import { auth } from "../firebase";
 
 export default function Home() {
   const [isHidden, setIsHidden] = React.useState(true);
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
-  const { transactions } = useTransactions();
+  const { transactions, balance } = useTransactions();
+  const [showHint, setShowHint] = useState(false);
+  const [image, setImage] = useState<string | null>(null);
+
+  useEffect(() => {
+    const loadImage = async () => {
+      const savedImage = await AsyncStorage.getItem("profileImage");
+      if (savedImage) {
+        setImage(savedImage);
+      }
+    };
+
+    loadImage();
+  }, []);
 
   useEffect(() => {
     const loadName = async () => {
@@ -45,6 +61,26 @@ export default function Home() {
       return "Good Evening 🌙";
     }
   };
+
+  useEffect(() => {
+    const checkHint = async () => {
+      const user = auth.currentUser;
+      if (!user) return;
+
+      const hint = await AsyncStorage.getItem(
+        `showProfileHint_${user.uid}`
+      );
+
+      if (hint === "true") {
+        setShowHint(true);
+        await AsyncStorage.removeItem(
+          `showProfileHint_${user.uid}`
+        );
+      }
+    };
+
+    checkHint();
+  }, []);
 
   const actions = [
     {
@@ -83,15 +119,17 @@ export default function Home() {
       >
         <View className="flex-row justify-between items-center pt-20 px-4">
           <View className="flex-row items-center">
-            <View
-              className="h-16 w-16 rounded-full bg-black/10 items-center justify-center mr-3"
-            >
-              <Text className="font-inter text-white font-semibold text-2xl">
-                {fullName ? fullName.charAt(0).toUpperCase() : "U"}
-              </Text>
-            </View>
+            {image ? (
+              <Image source={{ uri: image }} className="h-14 w-14 rounded-full border border-white" />
+            ) : (
+              <View className="h-14 w-14 rounded-full bg-black/10 items-center justify-center mr-3">
+                <Text className="font-inter text-white font-semibold text-2xl">
+                  {fullName?.charAt(0).toUpperCase()}
+                </Text>
+              </View>
+            )}
 
-            <View>
+            <View className="ml-2">
               <Text className="font-inter text-purple-200 text-md">{getGreeting()}</Text>
               <Text className="font-inter text-white text-lg font-semibold">
                 {fullName ? fullName : "Welcome!"}
@@ -113,10 +151,9 @@ export default function Home() {
             Available Balance
           </Text>
 
-          {/* Amount + Eye */}
           <View className="flex-row items-center mt-2">
             <Text className="font-inter text-white text-4xl font-bold mr-3">
-              {isHidden ? "********" : "$0.00"}
+              {isHidden ? "****" : balance.toLocaleString()}
             </Text>
 
             <TouchableOpacity onPress={() => setIsHidden(!isHidden)}>
@@ -186,48 +223,80 @@ export default function Home() {
         ))}
       </View>
 
-      {/* RECENT TRANSACTIONS */}
       <View className="mt-8 mb-20 px-4">
-        <View className="flex-row justify-between items-center">
-          <Text className="font-inter text-white text-lg font-semibold">
-            Recent Transactions
-          </Text>
-          <Text className="font-inter text-purple-500 text-sm">
-            See All
-          </Text>
+        <View className="mt-6">
+          <View className="flex-row justify-between items-center">
+            <Text className="font-inter text-white text-lg font-semibold">
+              Recent Transactions
+            </Text>
+            <TouchableOpacity onPress={() => router.push("/Transactions/History")} className="font-inter text-purple-500 text-sm">
+              <Text className="text-green-500">See All</Text>
+            </TouchableOpacity>
+          </View>
+
+          <View className="mt-4">
+            {transactions.length === 0 ? (
+              <View className="bg-[#1C1C1E] p-6 rounded-2xl items-center justify-center">
+                <Text className="text-gray-400 text-center">
+                  Your recent transactions will appear here.
+                </Text>
+              </View>
+            ) : (
+              transactions.map((tx) => {
+                const isSent = tx.type === "sent";
+
+                return (
+                  <View
+                    key={tx.id}
+                    className="bg-[#1C1C1E] p-4 rounded-2xl mb-3 flex-row justify-between items-center"
+                  >
+                    {/* Left Side */}
+                    <View className="flex-row items-center">
+                      <View
+                        className={`p-3 rounded-full ${isSent ? "bg-red-500/15" : "bg-green-500/15"
+                          }`}
+                      >
+                        <Ionicons
+                          name={isSent ? "arrow-up" : "arrow-down"}
+                          size={18}
+                          color={isSent ? "#ef4444" : "#22c55e"}
+                        />
+                      </View>
+
+                      <View className="ml-3">
+                        <Text className="text-white font-semibold">
+                          {tx.name}
+                        </Text>
+
+                        <Text className="text-gray-400 text-sm">
+                          {tx.note || "Transfer"}
+                        </Text>
+
+                        <Text className="text-gray-500 text-xs mt-1">
+                          {new Date(tx.date).toLocaleDateString()}
+                        </Text>
+                      </View>
+                    </View>
+
+                    {/* Right Side Amount */}
+                    <Text
+                      className={`font-semibold text-base ${isSent ? "text-red-400" : "text-green-400"
+                        }`}
+                    >
+                      {isSent ? "-" : "+"}$
+                      {tx.amount.toLocaleString()}
+                    </Text>
+                  </View>
+                );
+              })
+            )}
+          </View>
         </View>
 
-        <View className="mt-4">
-          {transactions.map((tx) => (
-            <View
-              key={tx.id}
-              className="bg-[#1C1C1E] p-4 rounded-2xl mb-3 flex-row justify-between items-center"
-            >
-              <View className="flex-row gap-2 items-center">
-                <Ionicons
-                  name="wallet-outline"
-                  size={18}
-                  color="#fff"
-                  className="bg-white/10 p-3 rounded-full"
-                />
-                <View>
-                  <Text className="text-white font-semibold">
-                    {tx.name}
-                  </Text>
-                  <Text className="text-gray-400 text-sm">
-                    {tx.note || "Transfer"}
-                  </Text>
-                </View>
-              </View>
-              <Text className="text-red-500 font-semibold">
-                -${Number(tx.amount).toLocaleString()}
-              </Text>
-            </View>
-          ))}
-        </View>
+        {showHint && <ProfileHint onClose={() => setShowHint(false)} />}
 
         {/* Transaction Item */}
-        <View className="bg-[#181818] rounded-2xl p-4 mt-1 flex-row justify-between items-center">
+        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-1 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
               <Ionicons
@@ -248,9 +317,9 @@ export default function Home() {
           <Text className="text-red-500 font-semibold">
             -$48
           </Text>
-        </View>
+        </View> */}
 
-        <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
+        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
               <Ionicons
@@ -271,9 +340,9 @@ export default function Home() {
           <Text className="text-green-500 font-semibold">
             +$90
           </Text>
-        </View>
+        </View> */}
 
-        <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
+        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
               <Ionicons
@@ -294,9 +363,9 @@ export default function Home() {
           <Text className="text-red-500 font-semibold">
             -$20
           </Text>
-        </View>
+        </View> */}
 
-        <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
+        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
               <Ionicons
@@ -317,9 +386,9 @@ export default function Home() {
           <Text className="text-red-500 font-semibold">
             -$20
           </Text>
-        </View>
+        </View> */}
 
-        <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
+        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
           <View className="flex-row items-center">
             <View className="bg-white/10 p-3 rounded-full mr-3">
               <Ionicons
@@ -340,7 +409,7 @@ export default function Home() {
           <Text className="text-red-500 font-semibold">
             -$20
           </Text>
-        </View>
+        </View> */}
       </View>
     </ScrollView>
   );

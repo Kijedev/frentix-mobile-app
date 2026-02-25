@@ -1,12 +1,13 @@
 import { auth } from "@/app/firebase";
 import "@/app/global.css";
 import { Feather, Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
-    Image,
+    Alert, Image,
     KeyboardAvoidingView,
     Platform,
     Text,
@@ -27,51 +28,53 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
-        setEmailError("");
-        setPasswordError("");
-        setAuthError("");
-
-        let valid = true;
-
-        if (!email) {
-            setEmailError("Email is required");
-            valid = false;
-        } else if (!email.includes("@")) {
-            setEmailError("Please enter a valid email");
-            valid = false;
-        }
-
-        if (!password) {
-            setPasswordError("Password is required");
-            valid = false;
-        } else if (password.length < 8) {
-            setPasswordError("Password must be at least 8 characters");
-            valid = false;
-        }
-
-        if (!valid) return;
-
         try {
-            setLoading(true);
-            await signInWithEmailAndPassword(auth, email.trim(), password);
+            const userCredential = await signInWithEmailAndPassword(
+                auth,
+                email,
+                password
+            );
+
+            const user = userCredential.user;
+
+            // Refresh user to get latest emailVerified state
+            await user.reload();
+
+            if (!user.emailVerified) {
+                Alert.alert(
+                    "Email Not Verified",
+                    "Please verify your email before logging in."
+                );
+                return;
+            }
+
+            // 🔥 Check if this is first login
+            const hasLoggedInBefore = await AsyncStorage.getItem(
+                `hasLoggedIn_${user.uid}`
+            );
+
+            if (!hasLoggedInBefore) {
+                // First time login
+                await AsyncStorage.setItem(
+                    `hasLoggedIn_${user.uid}`,
+                    "true"
+                );
+
+                await AsyncStorage.setItem(
+                    `showProfileHint_${user.uid}`,
+                    "true"
+                );
+            }
+
             router.replace("/(tabs)");
+
         } catch (error: any) {
-            setAuthError("Invalid email or password");
-        } finally {
-            setLoading(false);
+            Alert.alert("Login Error", error.message);
         }
     };
 
     return (
         <SafeAreaView className="flex-1 bg-[#0A0A0A] px-6">
-            {/* Back Button */}
-            {/* <TouchableOpacity
-                onPress={() => router.push("/(onboarding)")}
-                className="bg-[#181818] rounded-full items-center justify-center h-12 w-12 mt-4"
-            >
-                <Text className="text-white text-2xl font-light">←</Text>
-            </TouchableOpacity> */}
-
             <View className="items-center mt-20">
                 <Text className="font-inter text-white text-4xl font-bold">
                     Welcome Back!

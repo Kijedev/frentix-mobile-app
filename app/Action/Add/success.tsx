@@ -1,5 +1,6 @@
-import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
+import LottieView from "lottie-react-native";
 import React from "react";
 import {
     Text,
@@ -12,17 +13,18 @@ export default function SuccessScreen() {
     return (
         <SafeAreaView className="flex-1 bg-[#0C0C0C] px-6 justify-center">
             <View className="items-center">
+                <LottieView
+                    source={require("@/assets/Lottie/Card.json")}
+                    autoPlay
+                    loop
+                    style={{ width: 300, height: 300, marginTop: 50 }}
+                />
 
-                {/* Icon Circle */}
-                <View className="bg-purple-600/20 p-8 rounded-full mb-6">
-                    <Ionicons name="checkmark" size={50} color="#A855F7" />
-                </View>
-
-                <Text className="text-white font-inter text-2xl font-bold">
+                <Text className="text-white font-inter text-4xl font-bold">
                     Payment Successful!
                 </Text>
 
-                <Text className="text-white/50 font-inter text-sm text-center mt-3">
+                <Text className="text-white/50 font-inter text-sm text-center mt-2">
                     Your payment has been processed successfully.
                 </Text>
 
@@ -36,14 +38,26 @@ export default function SuccessScreen() {
                 </TouchableOpacity>
 
                 <TouchableOpacity
-                    onPress={() => router.replace("/(tabs)")}
-                    className="bg-purple-600 rounded-2xl py-4 px-10 mt-4 w-full items-center"
-                >
-                    <Text className="text-white font-semibold">
-                        Back to Home
-                    </Text>
+                    activeOpacity={0.8}
+                    className="mt-4 w-full"
+                    onPress={(() => {
+                        router.push('/(tabs)')
+                    })}>
+                    <LinearGradient
+                        colors={["#7C3AED", "#A855F7"]}
+                        start={{ x: 0, y: 0 }}
+                        end={{ x: 1, y: 0 }}
+                        className="py-4 rounded-full"
+                        style={{
+                            borderRadius: 12,
+                            paddingVertical: 12,
+                        }}
+                    >
+                        <Text className="font-inter text-white text-center font-semibold text-base">
+                            Back to Home
+                        </Text>
+                    </LinearGradient>
                 </TouchableOpacity>
-
             </View>
         </SafeAreaView>
     );
