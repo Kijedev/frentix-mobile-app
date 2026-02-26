@@ -1,13 +1,13 @@
 import { auth } from "@/app/firebase";
 import "@/app/global.css";
 import BackBtn from "@/components/BackBtn";
+import AppAlert from "@/components/ui/Alert";
 import { Feather } from "@expo/vector-icons";
 import { LinearGradient } from "expo-linear-gradient";
 import { router } from "expo-router";
 import { sendPasswordResetEmail } from "firebase/auth";
 import React, { useState } from "react";
 import {
-    Alert,
     Text,
     TextInput,
     TouchableOpacity,
@@ -22,6 +22,11 @@ const forgotpassword = () => {
     const [emailError, setEmailError] = useState("");
     const [successMessage, setSuccessMessage] = useState("");
     const [loading, setLoading] = useState(false);
+
+    const [alertVisible, setAlertVisible] = useState(false);
+    const [alertTitle, setAlertTitle] = useState("");
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertType, setAlertType] = useState<"success" | "error" | "info" | "warning">("info");
 
     const handleResetPassword = async () => {
         setEmailError("");
@@ -41,10 +46,19 @@ const forgotpassword = () => {
             setLoading(true);
             await sendPasswordResetEmail(auth, email.trim());
 
-            Alert.alert("Success", "Password reset link sent to your email.");
-            router.push("/(auth)/login");
+            // Show success alert
+            setAlertTitle("Password Reset Sent");
+            setAlertMessage(
+                "A password reset link has been sent to your email. Check your inbox and spam folder."
+            );
+            setAlertType("success");
+            setAlertVisible(true);
+
         } catch (error: any) {
-            setEmailError("No account found with this email.");
+            setAlertTitle("Error");
+            setAlertMessage("No account found with this email.");
+            setAlertType("error");
+            setAlertVisible(true);
         } finally {
             setLoading(false);
         }
@@ -110,6 +124,19 @@ const forgotpassword = () => {
                     </LinearGradient>
                 </TouchableOpacity>
             </View>
+            <AppAlert
+                visible={alertVisible}
+                type={alertType}
+                title={alertTitle}
+                message={alertMessage}
+                onClose={() => {
+                    setAlertVisible(false);
+                    // redirect to login page after success
+                    if (alertType === "success") {
+                        router.replace("/(auth)/login");
+                    }
+                }}
+            />
         </SafeAreaView>
     );
 };

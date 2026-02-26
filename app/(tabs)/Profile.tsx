@@ -1,16 +1,23 @@
+import ProfileAvatar from '@/components/ProfileAvatar'
+import AppAlert from '@/components/ui/Alert'
 import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from "@react-native-async-storage/async-storage"
 import { LinearGradient } from 'expo-linear-gradient'
 import { router } from 'expo-router'
 import { signOut } from "firebase/auth"
 import React, { useEffect, useState } from 'react'
-import { Alert, Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
+import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { auth } from "../firebase"
-import ProfileAvatar from '@/components/ProfileAvatar'
 
 const Profile = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error" | "info" | "warning">("info");
+  const [confirmText, setConfirmText] = useState("");
+  const [cancelText, setCancelText] = useState("");
 
   useEffect(() => {
     const loadName = async () => {
@@ -27,6 +34,13 @@ const Profile = () => {
     };
     loadEmail();
   }, []);
+
+  const handleLogout = () => {
+    setAlertTitle("Logout");
+    setAlertMessage("Are you sure you want to logout?");
+    setAlertType("warning");
+    setAlertVisible(true);
+  };
 
   const profiles = [
     {
@@ -55,24 +69,6 @@ const Profile = () => {
       screen: "/ProfileScreens/HelpCenter",
     },
   ]
-
-  const handleLogout = () => {
-    Alert.alert(
-      "Logout",
-      "Are you sure you want to logout?",
-      [
-        { text: "Cancel", style: "cancel" },
-        {
-          text: "Logout",
-          style: "destructive",
-          onPress: async () => {
-            await signOut(auth);
-            router.replace("/(auth)/login");
-          },
-        },
-      ]
-    );
-  };
 
   return (
     <ScrollView className="flex-1 bg-[#0C0C0C]">
@@ -150,33 +146,47 @@ const Profile = () => {
       </View>
 
       {/* Logout button */}
-      <View className='px-4 mb-20'>
-        <TouchableOpacity
-          onPress={handleLogout}
-          className="bg-[#181818] rounded-2xl p-4 mb-4 flex-row justify-between items-center"
-        >
-          <View className="flex-row items-center">
-            <View className="bg-white/10 p-3 rounded-full mr-3">
-              <Ionicons
-                size={18}
-                color="#fff"
-                name="log-out-outline"
-              />
-            </View>
-
-            <Text className="font-inter text-white font-medium">
-              Log out
-            </Text>
+      <TouchableOpacity
+        onPress={handleLogout}
+        className="bg-[#181818] rounded-2xl p-4 ml-4 mr-4 mb-20 flex-row justify-between items-center"
+      >
+        <View className="flex-row items-center">
+          <View className="bg-white/10 p-3 rounded-full mr-3">
+            <Ionicons
+              name='log-out-outline'
+              size={18}
+              color="#fff"
+            />
           </View>
 
-          <Ionicons
-            name="chevron-forward"
-            size={20}
-            color="#888"
-            className='bg-[#181818]/80 border border-white/5 p-2 rounded-full'
-          />
-        </TouchableOpacity>
-      </View>
+          <Text className="font-inter text-white">
+            Logout
+          </Text>
+        </View>
+
+        <Ionicons
+          name="chevron-forward"
+          size={20}
+          color="#888"
+          className='bg-[#181818]/80 border border-white/5 p-2 rounded-full'
+        />
+      </TouchableOpacity>
+
+
+      <AppAlert
+        visible={alertVisible}
+        type={alertType}
+        title={alertTitle}
+        message={alertMessage}
+        confirmText="Logout"
+        cancelText="Cancel"
+        onCancel={() => setAlertVisible(false)}
+        onConfirm={async () => {
+          setAlertVisible(false);
+          await signOut(auth);
+          router.replace("/(auth)/login");
+        }}
+      />
     </ScrollView>
   )
 }
