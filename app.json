@@ -5,7 +5,6 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/images/icon.png",
-    
     "scheme": "frentix",
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
@@ -20,7 +19,11 @@
       },
       "edgeToEdgeEnabled": true,
       "predictiveBackGestureEnabled": false,
-      "package": "com.kijeosowo23.frentix"
+      "package": "com.kijeosowo23.frentix",
+      "permissions": [
+        "android.permission.CAMERA",
+        "android.permission.RECORD_AUDIO"
+      ]
     },
     "web": {
       "bundler": "metro",
@@ -54,6 +57,11 @@
     "experiments": {
       "typedRoutes": true,
       "reactCompiler": true
+    },
+    "extra": {
+      "eas": {
+        "projectId": "f328e013-84ac-4f93-8a08-31b358919c6c"
+      }
     }
   }
 }
