@@ -25,15 +25,16 @@ export default function Home() {
   const [image, setImage] = useState<string | null>(null);
 
   useEffect(() => {
-    const loadImage = async () => {
-      const savedImage = await AsyncStorage.getItem("profileImage");
-      if (savedImage) {
-        setImage(savedImage);
-      }
-    };
-
     loadImage();
   }, []);
+
+  const loadImage = async () => {
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const savedImage = await AsyncStorage.getItem(`profileImage_${user.uid}`);
+    if (savedImage) setImage(savedImage);
+  };
 
   useEffect(() => {
     const loadName = async () => {
@@ -119,15 +120,17 @@ export default function Home() {
       >
         <View className="flex-row justify-between items-center pt-20 px-4">
           <View className="flex-row items-center">
-            {image ? (
-              <Image source={{ uri: image }} className="h-14 w-14 rounded-full border border-white" />
-            ) : (
-              <View className="h-14 w-14 rounded-full bg-black/10 items-center justify-center mr-3">
-                <Text className="font-inter text-white font-semibold text-2xl">
-                  {fullName?.charAt(0).toUpperCase()}
-                </Text>
-              </View>
-            )}
+            <TouchableOpacity onPress={() => router.push("/(tabs)/Profile")}>
+              {image ? (
+                <Image source={{ uri: image }} className="h-14 w-14 rounded-full border-2 border-white" />
+              ) : (
+                <View className="h-14 w-14 rounded-full bg-black/10 items-center justify-center mr-3">
+                  <Text className="font-inter text-white font-semibold text-2xl">
+                    {fullName?.charAt(0).toUpperCase()}
+                  </Text>
+                </View>
+              )}
+            </TouchableOpacity>
 
             <View className="ml-2">
               <Text className="font-inter text-purple-200 text-md">{getGreeting()}</Text>
@@ -230,7 +233,7 @@ export default function Home() {
               Recent Transactions
             </Text>
             <TouchableOpacity onPress={() => router.push("/Transactions/History")} className="font-inter text-purple-500 text-sm">
-              <Text className="text-green-500">See All</Text>
+              <Text className="text-[#ef4444]">See All</Text>
             </TouchableOpacity>
           </View>
 
@@ -278,7 +281,6 @@ export default function Home() {
                       </View>
                     </View>
 
-                    {/* Right Side Amount */}
                     <Text
                       className={`font-semibold text-base ${isSent ? "text-red-400" : "text-green-400"
                         }`}
@@ -292,125 +294,8 @@ export default function Home() {
             )}
           </View>
         </View>
-
-        {showHint && <ProfileHint onClose={() => setShowHint(false)} />}
-
-        {/* Transaction Item */}
-        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-1 flex-row justify-between items-center">
-          <View className="flex-row items-center">
-            <View className="bg-white/10 p-3 rounded-full mr-3">
-              <Ionicons
-                name="wallet-outline"
-                size={18}
-                color="#fff"
-              />
-            </View>
-            <View>
-              <Text className="font-inter text-white font-medium">
-                Sarmistha | Work
-              </Text>
-              <Text className="font-inter text-gray-400 text-xs">
-                12 Feb, 2025
-              </Text>
-            </View>
-          </View>
-          <Text className="text-red-500 font-semibold">
-            -$48
-          </Text>
-        </View> */}
-
-        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
-          <View className="flex-row items-center">
-            <View className="bg-white/10 p-3 rounded-full mr-3">
-              <Ionicons
-                name="cafe-outline"
-                size={18}
-                color="#fff"
-              />
-            </View>
-            <View>
-              <Text className="font-inter text-white font-medium">
-                Mocha Coffee | Food
-              </Text>
-              <Text className="font-inter text-gray-400 text-xs">
-                30 Jan, 2025
-              </Text>
-            </View>
-          </View>
-          <Text className="text-green-500 font-semibold">
-            +$90
-          </Text>
-        </View> */}
-
-        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
-          <View className="flex-row items-center">
-            <View className="bg-white/10 p-3 rounded-full mr-3">
-              <Ionicons
-                name="logo-amazon"
-                size={18}
-                color="#fff"
-              />
-            </View>
-            <View>
-              <Text className="font-inter text-white font-medium">
-                Amazon | Subscription
-              </Text>
-              <Text className="font-inter text-gray-400 text-xs">
-                28 Jan, 2025
-              </Text>
-            </View>
-          </View>
-          <Text className="text-red-500 font-semibold">
-            -$20
-          </Text>
-        </View> */}
-
-        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
-          <View className="flex-row items-center">
-            <View className="bg-white/10 p-3 rounded-full mr-3">
-              <Ionicons
-                name="logo-amazon"
-                size={18}
-                color="#fff"
-              />
-            </View>
-            <View>
-              <Text className="font-inter text-white font-medium">
-                Amazon | Subscription
-              </Text>
-              <Text className="font-inter text-gray-400 text-xs">
-                28 Jan, 2025
-              </Text>
-            </View>
-          </View>
-          <Text className="text-red-500 font-semibold">
-            -$20
-          </Text>
-        </View> */}
-
-        {/* <View className="bg-[#181818] rounded-2xl p-4 mt-4 flex-row justify-between items-center">
-          <View className="flex-row items-center">
-            <View className="bg-white/10 p-3 rounded-full mr-3">
-              <Ionicons
-                name="logo-amazon"
-                size={18}
-                color="#fff"
-              />
-            </View>
-            <View>
-              <Text className="font-inter text-white font-medium">
-                Amazon | Subscription
-              </Text>
-              <Text className="font-inter text-gray-400 text-xs">
-                28 Jan, 2025
-              </Text>
-            </View>
-          </View>
-          <Text className="text-red-500 font-semibold">
-            -$20
-          </Text>
-        </View> */}
       </View>
+      {showHint && <ProfileHint onClose={() => setShowHint(false)} />}
     </ScrollView>
   );
 }

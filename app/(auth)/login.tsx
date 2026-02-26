@@ -7,7 +7,7 @@ import { router } from "expo-router";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import React, { useState } from "react";
 import {
-    Alert, Image,
+    Image,
     KeyboardAvoidingView,
     Platform,
     Text,
@@ -28,48 +28,52 @@ const Login = () => {
     const [loading, setLoading] = useState(false);
 
     const handleLogin = async () => {
-        try {
-            const userCredential = await signInWithEmailAndPassword(
-                auth,
-                email,
-                password
-            );
+        setEmailError("");
+        setPasswordError("");
+        setAuthError("");
 
+        let valid = true;
+
+        if (!email) {
+            setEmailError("Email is required");
+            valid = false;
+        } else if (!email.includes("@")) {
+            setEmailError("Please enter a valid email");
+            valid = false;
+        }
+
+        if (!password) {
+            setPasswordError("Password is required");
+            valid = false;
+        } else if (password.length < 6) {
+            setPasswordError("Password must be at least 6 characters");
+            valid = false;
+        }
+
+        if (!valid) return;
+
+        try {
+            setLoading(true);
+            const userCredential = await signInWithEmailAndPassword(auth, email, password);
             const user = userCredential.user;
 
-            // Refresh user to get latest emailVerified state
             await user.reload();
-
             if (!user.emailVerified) {
-                Alert.alert(
-                    "Email Not Verified",
-                    "Please verify your email before logging in."
-                );
+                setAuthError("Please verify your email before logging in.");
                 return;
             }
 
-            // 🔥 Check if this is first login
-            const hasLoggedInBefore = await AsyncStorage.getItem(
-                `hasLoggedIn_${user.uid}`
-            );
-
+            const hasLoggedInBefore = await AsyncStorage.getItem(`hasLoggedIn_${user.uid}`);
             if (!hasLoggedInBefore) {
-                // First time login
-                await AsyncStorage.setItem(
-                    `hasLoggedIn_${user.uid}`,
-                    "true"
-                );
-
-                await AsyncStorage.setItem(
-                    `showProfileHint_${user.uid}`,
-                    "true"
-                );
+                await AsyncStorage.setItem(`hasLoggedIn_${user.uid}`, "true");
+                await AsyncStorage.setItem(`showProfileHint_${user.uid}`, "true");
             }
 
             router.replace("/(tabs)");
-
         } catch (error: any) {
-            Alert.alert("Login Error", error.message);
+            setAuthError("Invalid email or password");
+        } finally {
+            setLoading(false);
         }
     };
 

@@ -1,27 +1,27 @@
-import React, { useEffect, useState } from "react";
-import { View, Text, TouchableOpacity, Image, Alert } from "react-native";
-import * as ImagePicker from "expo-image-picker";
-import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import * as ImagePicker from "expo-image-picker";
+import React, { useEffect, useState } from "react";
+import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
+import { auth } from "@/app/firebase";
 
 export default function ProfileAvatar({ fullName }: { fullName: string }) {
   const [image, setImage] = useState<string | null>(null);
 
-  // Load image on mount
   useEffect(() => {
     loadImage();
   }, []);
 
   const loadImage = async () => {
-    const savedImage = await AsyncStorage.getItem("profileImage");
-    if (savedImage) {
-      setImage(savedImage);
-    }
+    const user = auth.currentUser;
+    if (!user) return;
+
+    const savedImage = await AsyncStorage.getItem(`profileImage_${user.uid}`);
+    if (savedImage) setImage(savedImage);
   };
 
   const pickImage = async () => {
     const permission = await ImagePicker.requestMediaLibraryPermissionsAsync();
-
     if (!permission.granted) {
       Alert.alert("Permission required", "Allow access to your gallery.");
       return;
@@ -37,20 +37,21 @@ export default function ProfileAvatar({ fullName }: { fullName: string }) {
 
     if (!result.canceled) {
       const base64Img = `data:image/jpeg;base64,${result.assets[0].base64}`;
+      const user = auth.currentUser;
+      if (!user) return;
 
       setImage(base64Img);
-      await AsyncStorage.setItem("profileImage", base64Img);
+      await AsyncStorage.setItem(`profileImage_${user.uid}`, base64Img);
     }
   };
 
   return (
     <View className="items-center">
-      {/* Avatar */}
       <View className="relative">
         {image ? (
           <Image
             source={{ uri: image }}
-            className="h-32 w-32 rounded-full"
+            className="h-32 w-32 rounded-full border border-2 border-white"
           />
         ) : (
           <View className="bg-black/10 h-32 w-32 rounded-full items-center justify-center">
@@ -60,7 +61,6 @@ export default function ProfileAvatar({ fullName }: { fullName: string }) {
           </View>
         )}
 
-        {/* Edit Button */}
         <TouchableOpacity
           onPress={pickImage}
           className="absolute bottom-0 right-0 bg-purple-600 p-2 rounded-full"

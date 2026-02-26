@@ -1,6 +1,7 @@
 import { auth } from "@/app/firebase";
 import "@/app/global.css";
 import BackBtn from "@/components/BackBtn";
+import AppAlert from "@/components/ui/Alert";
 import { sendEmailVerification } from "@/lib/sendEmailVerification";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -9,7 +10,7 @@ import { router } from "expo-router";
 import { createUserWithEmailAndPassword, signOut } from "firebase/auth";
 import React, { useState } from "react";
 import {
-  Alert, Image,
+  Image,
   KeyboardAvoidingView,
   Platform,
   Text,
@@ -29,6 +30,10 @@ const Register = () => {
   const [passwordError, setPasswordError] = useState("");
   const [authError, setAuthError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error" | "info" | "warning">("info");
 
   const handleRegister = async () => {
     setEmailError("");
@@ -63,23 +68,30 @@ const Register = () => {
         email.trim(),
         password
       );
+
+      // Save basic info
       await AsyncStorage.setItem('userFullName', fullName);
       await AsyncStorage.setItem('userEmail', email);
       await AsyncStorage.setItem("hasAccount", "true");
       await AsyncStorage.setItem("balance", "0");
 
       if (auth.currentUser) {
+        // Send email verification
         await sendEmailVerification(auth.currentUser);
-        Alert.alert(
-          "Verification Email Sent",
-          "Check your email and verify your account before logging in. 🚨 If no email was received in primary inbox, check your spam folder."
+
+        // Show verification alert
+        setAlertTitle("Verify Your Email");
+        setAlertMessage(
+          "Check your inbox and verify your account before logging in. 🚨 " +
+          "If no email appears in your primary inbox, check your spam folder."
         );
+        setAlertType("info");
+        setAlertVisible(true);
+
+        // Sign out so user can't log in before verification
         await signOut(auth);
       }
 
-
-
-      router.replace("/(auth)/login");
     } catch (error: any) {
       if (error.code === "auth/email-already-in-use") {
         setEmailError("This email is already registered");
@@ -248,8 +260,18 @@ const Register = () => {
             </Text>
           </TouchableOpacity>
         </View>
-
       </View>
+
+      <AppAlert
+        visible={alertVisible}
+        type={alertType}
+        title={alertTitle}
+        message={alertMessage}
+        onClose={() => {
+          setAlertVisible(false);
+          router.replace("/(auth)/login");
+        }}
+      />
     </SafeAreaView >
   );
 };
