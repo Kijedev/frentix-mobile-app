@@ -148,7 +148,7 @@ const Profile = () => {
       {/* Logout button */}
       <TouchableOpacity
         onPress={handleLogout}
-        className="bg-[#181818] rounded-2xl p-4 ml-4 mr-4 mb-20 flex-row justify-between items-center"
+        className="bg-[#181818] rounded-2xl p-4 ml-4 mr-4 mb-28 flex-row justify-between items-center"
       >
         <View className="flex-row items-center">
           <View className="bg-white/10 p-3 rounded-full mr-3">

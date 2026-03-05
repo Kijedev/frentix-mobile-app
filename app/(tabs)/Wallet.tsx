@@ -60,7 +60,7 @@ export default function Scan() {
         <View className="w-48 h-48 border-2 border-dashed border-purple-600 rounded-2xl" />
       </View>
 
-      <SafeAreaView className="absolute bottom-20 w-full items-center">
+      <SafeAreaView className="absolute bottom-28 w-full items-center">
         <TouchableOpacity
           onPress={() => setTorch(!torch)}
           className="absolute bottom-28 right-6 bg-black/50 p-4 rounded-full"
@@ -73,7 +73,7 @@ export default function Scan() {
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => setScanned(false)}
-          className="bg-purple-600 px-8 py-4 rounded-full"
+          className="bg-[#722cebff] px-8 py-4 rounded-full"
         >
           <Text className="text-white font-semibold">
             Scan Again
