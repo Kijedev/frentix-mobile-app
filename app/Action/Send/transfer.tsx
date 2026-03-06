@@ -44,7 +44,7 @@ export default function Transfer() {
                     <View className="w-10" />
                 </View>
 
-                <View className="flex-row bg-[#141414] rounded-full p-1 mt-6">
+                <View className="flex-row bg-[#141414] rounded-full p-1 mt-4">
                     <TouchableOpacity
                         onPress={() => setActiveTab("bank")}
                         className={`font-inter flex-1 py-3 rounded-full items-center ${activeTab === "bank" ? "bg-purple-600" : ""
