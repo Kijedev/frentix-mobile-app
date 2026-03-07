@@ -1,3 +1,4 @@
+import PatternImage from "@/assets/images/pattern.png";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
@@ -7,6 +8,7 @@ import {
     Dimensions,
     GestureResponderEvent,
     Image,
+    ImageBackground,
     Keyboard,
     KeyboardAvoidingView,
     Modal,
@@ -19,7 +21,7 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    ViewStyle,
+    ViewStyle
 } from "react-native";
 
 const { width } = Dimensions.get("window");
@@ -31,6 +33,7 @@ type Card = {
     name: string;
     number: string;
     gradient: [string, string];
+    backgroundImage?: string;
 };
 
 type Bank = {
@@ -40,10 +43,10 @@ type Bank = {
 
 const CARD_GRADIENTS = [
     ["#6366F1", "#8B5CF6"],
-    ["#000000", "#181818"],
+    ["#000000", "#000000"],
     ["#10B981", "#059669"],
     ["#F59E0B", "#D97706"],
-    ["#3B82F6", "#2563EB"],
+    // ["#3B82F6", "#2563EB"],
 ];
 
 const Bank = () => {
@@ -166,7 +169,6 @@ const Bank = () => {
         // safely assert the type to [string, string]
         return CARD_GRADIENTS[index] as [string, string];
     };
-
 
     /* ---------------- DELETE CARD ---------------- */
 
@@ -308,7 +310,8 @@ const Bank = () => {
                                 width: "100%",
                                 height: 180,
                                 top: index * 12,
-                                left: index * 16,
+                                // left: index * 16,
+                                // right: index * 16,
                                 borderRadius: 20,
                                 zIndex: cards.length - index,
                             };
@@ -326,49 +329,54 @@ const Bank = () => {
                                         style={{
                                             flex: 1,
                                             borderRadius: 20,
-                                            padding: 20,
+                                            padding: 0,
                                         }}
                                     >
-
-                                        <TouchableOpacity
-                                            onPress={() => handleCardSelect(item)}
-                                            className="relative"
+                                        <ImageBackground
+                                            source={PatternImage}
+                                            style={{ flex: 1, padding: 20 }}
+                                            imageStyle={{ borderRadius: 20, opacity: 0.4 }}
+                                            resizeMode="cover"
                                         >
-                                            <View className="flex-row items-center">
-                                                {/* Bank Logo */}
-                                                {banks
-                                                    .filter((bank) => bank.name === item.name)
-                                                    .map((bank, index) => (
-                                                        <Image
-                                                            key={index}
-                                                            source={{
-                                                                uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`,
-                                                            }}
-                                                            className="w-8 h-8 mr-3 rounded-full"
-                                                        />
-                                                    ))}
+                                            <TouchableOpacity
+                                                onPress={() => handleCardSelect(item)}
+                                                className="relative"
+                                            >
+                                                <View className="flex-row items-center">
+                                                    {banks
+                                                        .filter((bank) => bank.name === item.name)
+                                                        .map((bank, index) => (
+                                                            <Image
+                                                                key={index}
+                                                                source={{
+                                                                    uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`,
+                                                                }}
+                                                                className="w-8 h-8 mr-3 rounded-full"
+                                                            />
+                                                        ))}
 
-                                                {/* Bank Name */}
-                                                <Text className="text-white text-xl font-bold">{item.name}</Text>
-                                            </View>
+                                                    {/* Bank Name */}
+                                                    <Text className="text-white font-inter text-xl font-bold">{item.name}</Text>
+                                                </View>
 
-                                            {/* Card Number */}
-                                            <Text className="text-white/70 mt-2 absolute -bottom-32">
-                                                {maskCard(item.number)}
-                                            </Text>
-                                        </TouchableOpacity>
+                                                {/* Card Number */}
+                                                <Text className="text-white font-inter font-semibold mt-2 absolute -bottom-32">
+                                                    {maskCard(item.number)}
+                                                </Text>
+                                            </TouchableOpacity>
 
-                                        <TouchableOpacity
-                                            onPress={() => deleteCard(item.id)}
-                                            style={{
-                                                position: "absolute",
-                                                right: 15,
-                                                top: 15,
-                                            }}
-                                            className="bg-red-500/80 rounded-full p-2"
-                                        >
-                                            <Ionicons name="trash-outline" size={20} color="white" />
-                                        </TouchableOpacity>
+                                            <TouchableOpacity
+                                                onPress={() => deleteCard(item.id)}
+                                                style={{
+                                                    position: "absolute",
+                                                    right: 15,
+                                                    top: 15,
+                                                }}
+                                                className="bg-red-500/80 rounded-full p-2"
+                                            >
+                                                <Ionicons name="trash-outline" size={20} color="white" />
+                                            </TouchableOpacity>
+                                        </ImageBackground>
                                     </LinearGradient>
                                 </Animated.View>
                             );
@@ -510,19 +518,24 @@ const Bank = () => {
                 </TouchableOpacity>
             </KeyboardAvoidingView>
 
-            {/* Modal */}
             <Modal
                 transparent
                 visible={modalVisible}
                 animationType="slide"
                 onRequestClose={() => setModalVisible(false)}
             >
-                <View className="flex-1 justify-end bg-black/50">
+                {/* <View className="flex-1 justify-end bg-black/50" /> */}
+                <KeyboardAvoidingView
+                    style={{ flex: 1, justifyContent: "flex-end" }}
+                    behavior={Platform.OS === "ios" ? "padding" : "height"}
+                    keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
+                >
                     <View className="bg-[#0C0C0C] rounded-t-3xl p-6 h-[50%]">
                         <View className="w-12 h-1.5 bg-gray-500 rounded-full self-center mb-4" />
                         <Text className="text-white text-lg font-semibold mb-4">
                             Add Bank Card
                         </Text>
+
                         <View>
                             <Text className="text-white mb-2">Bank Name</Text>
                             <TouchableOpacity
@@ -564,7 +577,7 @@ const Bank = () => {
                             )}
                         </View>
 
-                        <Text className="text-white mb-2">Card Number</Text>
+                        <Text className="text-white mb-2 mt-4">Card Number</Text>
                         <TextInput
                             value={newCardNumber}
                             onChangeText={(text) =>
@@ -591,7 +604,7 @@ const Bank = () => {
                             </TouchableOpacity>
                         </View>
                     </View>
-                </View>
+                </KeyboardAvoidingView>
             </Modal>
         </>
     )
