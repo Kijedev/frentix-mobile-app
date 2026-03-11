@@ -122,7 +122,7 @@ export default function Home() {
           <View className="flex-row items-center">
             <TouchableOpacity onPress={() => router.push("/(tabs)/Profile")}>
               {image ? (
-                <Image source={{ uri: image }} className="h-14 w-14 rounded-full border-2 border-white" />
+                <Image source={{ uri: image }} className="h-14 w-14 rounded-full border-2 border-white/50 p-0.5" />
               ) : (
                 <View className="h-14 w-14 rounded-full bg-black/10 items-center justify-center mr-3">
                   <Text className="font-inter text-white font-semibold text-2xl">
