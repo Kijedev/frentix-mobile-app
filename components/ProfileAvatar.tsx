@@ -1,9 +1,9 @@
+import { auth } from "@/app/firebase";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import * as ImagePicker from "expo-image-picker";
 import React, { useEffect, useState } from "react";
 import { Alert, Image, Text, TouchableOpacity, View } from "react-native";
-import { auth } from "@/app/firebase";
 
 export default function ProfileAvatar({ fullName }: { fullName: string }) {
   const [image, setImage] = useState<string | null>(null);
@@ -48,25 +48,28 @@ export default function ProfileAvatar({ fullName }: { fullName: string }) {
   return (
     <View className="items-center">
       <View className="relative">
-        {image ? (
-          <Image
-            source={{ uri: image }}
-            className="h-32 w-32 rounded-full border border-2 border-white"
-          />
-        ) : (
-          <View className="bg-black/10 h-32 w-32 rounded-full items-center justify-center">
-            <Text className="font-inter text-white text-5xl font-semibold">
-              {fullName ? fullName.charAt(0).toUpperCase() : "U"}
-            </Text>
-          </View>
-        )}
+        <TouchableOpacity onPress={pickImage}>
+          {image ? (
+            <Image
+              source={{ uri: image }}
+              className="h-32 w-32 rounded-full border border-2 border-white/30 p-1"
+            />
+          ) : (
+            <View className="bg-black/10 h-32 w-32 rounded-full items-center justify-center">
+              <Text className="font-inter text-white text-5xl font-semibold">
+                {fullName ? fullName.charAt(0).toUpperCase() : "U"}
+              </Text>
+            </View>
+          )}
+        </TouchableOpacity>
 
-        <TouchableOpacity
+
+        {/* <TouchableOpacity
           onPress={pickImage}
           className="absolute bottom-0 right-0 bg-purple-600 p-2 rounded-full"
         >
           <Ionicons name="pencil" size={18} color="white" />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
       </View>
     </View>
   );

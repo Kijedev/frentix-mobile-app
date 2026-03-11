@@ -9,15 +9,13 @@ import React, { useEffect, useState } from 'react'
 import { Platform, ScrollView, Text, TouchableOpacity, View } from 'react-native'
 import { auth } from "../firebase"
 
-const Profile = () => {
+const MyCardsScreen = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [alertVisible, setAlertVisible] = useState(false);
   const [alertTitle, setAlertTitle] = useState("");
   const [alertMessage, setAlertMessage] = useState("");
   const [alertType, setAlertType] = useState<"success" | "error" | "info" | "warning">("info");
-  const [confirmText, setConfirmText] = useState("");
-  const [cancelText, setCancelText] = useState("");
 
   useEffect(() => {
     const loadName = async () => {
@@ -51,7 +49,7 @@ const Profile = () => {
     {
       name: "My Cards",
       icon: "card-outline",
-      screen: "/ProfileScreens/Cards",
+      screen: "/ProfileScreens/MyCardsScreen",
     },
     {
       name: "Settings",
@@ -92,17 +90,17 @@ const Profile = () => {
             <Text className="font-inter text-white text-2xl font-semibold">Profile</Text>
           </View>
 
-          <TouchableOpacity className="bg-black/10 p-3 rounded-full">
-            <Ionicons
-              name="notifications-outline"
-              size={18}
-              color="#fff"
-            />
+          <TouchableOpacity
+            className="bg-black/10 rounded-full items-center justify-center h-12 w-12 mt-4"
+          >
+            <Ionicons name="pencil" size={18} color="white" />
           </TouchableOpacity>
         </View>
 
         <View className="mt-6 items-center">
+
           <ProfileAvatar fullName={fullName} />
+
           <View className='mt-5 pb-10'>
             <Text className="font-inter text-white text-2xl font-semibold text-center">
               {fullName ? fullName : "Welcome!"}
@@ -191,4 +189,4 @@ const Profile = () => {
   )
 }
 
-export default Profile
+export default MyCardsScreen
