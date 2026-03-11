@@ -1,7 +1,8 @@
 import { Ionicons } from '@expo/vector-icons';
 import { LinearGradient } from 'expo-linear-gradient';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { SvgUri } from "react-native-svg";
 
 type Card = {
     name: string;
@@ -10,16 +11,39 @@ type Card = {
 };
 
 type Bank = {
-    name: string;
-    slug: string;
+    id: string;
+    order: number;
+    title: string;
+    categories: string[];
+    route: string;
+    url: string;
+    ticker: string;
 };
 
 const Contact = () => {
     const [banks, setBanks] = useState<Bank[]>([]);
     const [selectedBank, setSelectedBank] = useState("");
     const [showBanks, setShowBanks] = useState(false);
-    const [bankLogo, setBankLogo] = useState<string>("");
-    const [newBank, setNewBank] = useState("")
+
+    useEffect(() => {
+        const fetchBanks = async () => {
+            try {
+                const res = await fetch("https://api.nigerianbanklogos.xyz");
+                const data = await res.json();
+
+                // only keep real banks
+                const onlyBanks = data.filter((b: Bank) =>
+                    b.categories.includes("Bank")
+                );
+
+                setBanks(onlyBanks);
+            } catch (error) {
+                console.log("Error fetching banks:", error);
+            }
+        };
+
+        fetchBanks();
+    }, []);
 
     return (
         <>
@@ -90,8 +114,9 @@ const Contact = () => {
                             className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center mb-4"
                         >
                             <Ionicons name="business-outline" size={18} color="#888" />
+
                             <Text className="text-white ml-3 flex-1">
-                                {newBank || "Select Bank"}
+                                {selectedBank || "Select Bank"}
                             </Text>
                         </TouchableOpacity>
 
@@ -105,28 +130,26 @@ const Contact = () => {
                                         <TouchableOpacity
                                             key={index}
                                             onPress={() => {
-                                                setNewBank(bank.name);
+                                                setSelectedBank(bank.title);
                                                 setShowBanks(false);
                                             }}
-                                            className="px-4 py-3 flex-row items-center border-b border-[#2A2A2A]"
+                                            className="px-4 py-3 flex-row gap-4 items-center border-b border-[#2A2A2A]"
                                         >
-                                            <Image
-                                                source={{
-                                                    uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
-                                                }}
-                                                className="w-8 h-8 mr-3"
+                                            <SvgUri
+                                                height={32}
+                                                width={32}
+                                                uri={bank.route}
                                             />
-                                            <Text className="text-white">{bank.name}</Text>
+
+                                            <Text className="text-white">{bank.title}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </ScrollView>
                             </View>
                         )}
-
-
                     </View>
 
-                    <Text className="font-inter text-white mb-4 mt-6">Card Number</Text>
+                    <Text className="font-inter text-white mb-4 mt-4">Card Number</Text>
                     <View className="bg-[#181818] rounded-xl px-4 py-4 flex-row items-center" style={{ paddingVertical: Platform.OS === "ios" ? 16 : 12 }}>
                         <Ionicons
                             name="card-outline"

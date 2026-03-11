@@ -4,6 +4,7 @@ export type Bank = {
 };
 const BASE_URL = "https://supermx1.github.io/nigerian-banks-api/data.json"
 // const BASE_URL = "https://api.nigerianbanklogos.xyz";
+const LOGO_URL = "https://api.nigerianbanklogos.xyz"
 
 /* GET ALL BANKS */
 export const getBanks = async (): Promise<Bank[]> => {
@@ -21,5 +22,5 @@ export const getBanks = async (): Promise<Bank[]> => {
 
 /* GET BANK LOGO */
 export const getBankLogo = (slug: string) => {
-  return `${BASE_URL}/logo/${slug}`;
+  return `${LOGO_URL}/logo/${slug}`;
 };

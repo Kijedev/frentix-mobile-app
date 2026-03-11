@@ -7,7 +7,6 @@ import {
     Animated,
     Dimensions,
     GestureResponderEvent,
-    Image,
     ImageBackground,
     Keyboard,
     KeyboardAvoidingView,
@@ -23,6 +22,7 @@ import {
     View,
     ViewStyle
 } from "react-native";
+import { SvgUri } from "react-native-svg";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.8;
@@ -37,8 +37,13 @@ type Card = {
 };
 
 type Bank = {
-    name: string;
-    slug: string;
+    id: string;
+    order: number;
+    title: string;
+    categories: string[];
+    route: string;
+    url: string;
+    ticker: string;
 };
 
 const CARD_GRADIENTS = [
@@ -84,7 +89,7 @@ const Bank = () => {
                 setLoadingBanks(true);
 
                 const response = await fetch(
-                    "https://supermx1.github.io/nigerian-banks-api/data.json"
+                    "https://api.nigerianbanklogos.xyz"
                 );
 
                 const data: Bank[] = await response.json();
@@ -342,16 +347,14 @@ const Bank = () => {
                                                 onPress={() => handleCardSelect(item)}
                                                 className="relative"
                                             >
-                                                <View className="flex-row items-center">
+                                                <View className="flex-row gap-3 items-center">
                                                     {banks
-                                                        .filter((bank) => bank.name === item.name)
+                                                        .filter((bank) => bank.title === item.name)
                                                         .map((bank, index) => (
-                                                            <Image
-                                                                key={index}
-                                                                source={{
-                                                                    uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`,
-                                                                }}
-                                                                className="w-8 h-8 mr-3 rounded-full"
+                                                            <SvgUri
+                                                                height={32}
+                                                                width={32}
+                                                                uri={bank.route}
                                                             />
                                                         ))}
 
@@ -433,19 +436,18 @@ const Bank = () => {
                                         <TouchableOpacity
                                             key={index}
                                             onPress={() => {
-                                                setSelectedBank(bank.name);
+                                                setSelectedBank(bank.title);
                                                 setShowBanks(false);
                                             }}
-                                            className="px-4 py-3 flex-row items-center border-b border-[#2A2A2A]"
+                                            className="px-4 py-3 flex-row gap-4 items-center border-b border-[#2A2A2A]"
                                         >
-                                            <Image
-                                                source={{
-                                                    uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`,
-                                                }}
-                                                className="w-8 h-8 mr-3"
+                                            <SvgUri
+                                                height={32}
+                                                width={32}
+                                                uri={bank.route}
                                             />
 
-                                            <Text className="text-white">{bank.name}</Text>
+                                            <Text className="text-white">{bank.title}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </ScrollView>
@@ -455,7 +457,7 @@ const Bank = () => {
 
                     {/* CARD NUMBER */}
 
-                    <Text className="font-inter text-white mb-4 mt-6">
+                    <Text className="font-inter text-white mb-4 mt-4">
                         Card Number
                     </Text>
 
@@ -558,18 +560,17 @@ const Bank = () => {
                                             <TouchableOpacity
                                                 key={index}
                                                 onPress={() => {
-                                                    setNewBank(bank.name);
+                                                    setNewBank(bank.title);
                                                     setShowBanks(false);
                                                 }}
-                                                className="px-4 py-3 flex-row items-center border-b border-[#2A2A2A]"
+                                                className="px-4 py-3 flex-row gap-4 items-center border-b border-[#2A2A2A]"
                                             >
-                                                <Image
-                                                    source={{
-                                                        uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
-                                                    }}
-                                                    className="w-8 h-8 mr-3"
+                                                <SvgUri
+                                                    height={32}
+                                                    width={32}
+                                                    uri={bank.route}
                                                 />
-                                                <Text className="text-white">{bank.name}</Text>
+                                                <Text className="text-white">{bank.title}</Text>
                                             </TouchableOpacity>
                                         ))}
                                     </ScrollView>
