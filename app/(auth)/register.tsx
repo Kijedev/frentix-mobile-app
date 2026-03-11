@@ -76,7 +76,6 @@ const Register = () => {
       await AsyncStorage.setItem("balance", "0");
 
       if (auth.currentUser) {
-        // Send email verification
         await sendEmailVerification(auth.currentUser);
 
         // Show verification alert
@@ -184,7 +183,7 @@ const Register = () => {
           ) : null}
         </KeyboardAvoidingView>
 
-        <View className="flex-row justify-between items-center mt-5">
+        <View className="flex-row gap-3 items-center mt-5">
           <TouchableOpacity
             onPress={() => setRemember(!remember)}
             className="flex-row items-center"
@@ -197,7 +196,12 @@ const Register = () => {
                 <View className="h-2 w-2 bg-purple-500 rounded-full" />
               )}
             </View>
-            <Text className="text-gray-400">I agree to the <Text className="text-[#8538FD] font-medium underline">Terms and conditions</Text></Text>
+            <Text className="text-gray-400">I agree to the</Text>
+          </TouchableOpacity>
+
+          {/* Terms_consitions */}
+          <TouchableOpacity onPress={() => router.push("/Terms_Conditions")}>
+            <Text className="text-[#8538FD] font-medium underline">Terms and conditions</Text>
           </TouchableOpacity>
         </View>
 

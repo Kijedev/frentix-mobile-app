@@ -58,7 +58,6 @@ const HelpCenter = () => {
           </View>
         ))}
 
-        {/* Contact Support Button */}
         <TouchableOpacity
           className="bg-[#7C3AED] mt-6 py-4 rounded-xl items-center flex-row justify-center"
           activeOpacity={0.8}
