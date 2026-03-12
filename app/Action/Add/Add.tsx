@@ -2,6 +2,7 @@ import { useNotifications } from "@/app/context/NotificationContext";
 import { useTransactions } from "@/app/context/TransactionContext";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import React, { useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, Text, TextInput, TouchableOpacity, View } from "react-native";
@@ -13,10 +14,11 @@ export default function PayScreen() {
     const [amount, setAmount] = useState("");
     const [note, setNote] = useState("");
 
-    const handlePay = () => {
+    const handlePay = async () => {
         const numericAmount = Number(amount);
         if (!numericAmount || numericAmount <= 0) return;
 
+        // Haptic feedback
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy);
 
         // Add transaction (simulated deposit)
@@ -28,13 +30,23 @@ export default function PayScreen() {
         });
 
         if (success) {
-            // Add notification for this deposit
+            // Add in-app notification (red dot)
             addNotification(
                 "Deposit Successful 💰",
                 `₦${numericAmount.toLocaleString()} has been added to your balance`
             );
 
-            // Navigate to success page (optional)
+            // Show a local notification on the device
+            await Notifications.scheduleNotificationAsync({
+                content: {
+                    title: "Deposit Successful 💰",
+                    body: `₦${numericAmount.toLocaleString()} has been added to your balance`,
+                    sound: true, // plays notification sound
+                },
+                trigger: null, // shows immediately
+            });
+
+            // Navigate to success page
             router.push("/Action/Add/success");
         }
     };

@@ -42,7 +42,7 @@ export default function AppAlert({
 
     return (
         <Modal transparent animationType="fade" visible={visible}>
-            <View className="flex-1 justify-center items-center bg-black/50 px-6">
+            <View className="flex-1 justify-center items-center bg-black/90 px-6">
                 <View className="bg-[#0A0A0A] rounded-2xl p-6 w-full max-w-sm">
                     <View className="items-center mb-4">{getIcon()}</View>
                     <Text className="text-white font-inter text-xl font-semibold text-center mb-2">
@@ -55,7 +55,7 @@ export default function AppAlert({
                             {cancelText && onCancel && (
                                 <TouchableOpacity
                                     onPress={onCancel}
-                                    className="px-4 py-3 bg-gray-700 rounded-xl flex-1"
+                                    className="px-4 py-3 bg-[#181818] mr-3 rounded-xl flex-1"
                                 >
                                     <Text className="text-white font-inter text-center">{cancelText}</Text>
                                 </TouchableOpacity>
