@@ -1,4 +1,5 @@
 import PatternImage from "@/assets/images/pattern.png";
+import Chip from "@/assets/images/chip.png";
 import BackBtn from "@/components/BackBtn";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -10,6 +11,7 @@ import {
   Text,
   TouchableOpacity,
   View,
+  Image
 } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { SvgUri } from "react-native-svg";
@@ -94,8 +96,8 @@ const AccountScreen = () => {
         </Text>
       </View>
 
-      <View className="px-4 mt-10">
-        <Text className="text-white/60 font-inter text-xl">
+      <View className="px-4 mt-6">
+        <Text className="text-white/60 text-center font-inter text-lg">
           You can manage all your cards here.
         </Text>
       </View>
@@ -121,21 +123,27 @@ const AccountScreen = () => {
                 imageStyle={{ borderRadius: 20, opacity: 0.4 }}
                 style={{ padding: 20, height: 200 }}
               >
-                {/* Bank Info */}
-                <View className="flex-row items-center gap-3">
-                  {bank && (
-                    <SvgUri height={32} width={32} uri={bank.route} />
-                  )}
+                <View className="flex-col justify-between h-full gap-3">
+                  {banks
+                    .filter((bank) => bank.title === item.name)
+                    .map((bank, index) => (
+                      <SvgUri
+                        key={index}
+                        height={32}
+                        width={32}
+                        uri={bank.route}
+                      />
+                    ))}
 
-                  <Text className="text-white font-inter text-xl font-bold">
-                    {item.name}
+                  {/* Bank Name */}
+                  <Text className="text-white font-inter text-xl font-bold">{item.name}</Text>
+                  {/* Chip */}
+                  <Image source={Chip} style={{ width: 40, height: 30 }} resizeMode="contain" />
+                  {/* Card Number */}
+                  <Text className="text-white font-inter font-semibold mt-2">
+                    {maskCard(item.number)}
                   </Text>
                 </View>
-
-                {/* Card Number */}
-                <Text className="absolute bottom-5 left-5 text-white font-inter font-semibold mt-6 text-lg">
-                  {maskCard(item.number)}
-                </Text>
 
                 {/* Delete Button */}
                 <TouchableOpacity

@@ -4,6 +4,7 @@ import ProfileHint from "@/components/ProfileHint";
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
+import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -81,6 +82,19 @@ export default function Home() {
     };
 
     checkHint();
+  }, []);
+
+  // Notifications
+  useEffect(() => {
+    const requestPermission = async () => {
+      const { status } = await Notifications.requestPermissionsAsync();
+
+      if (status !== "granted") {
+        alert("Permission for notifications not granted!");
+      }
+    };
+
+    requestPermission();
   }, []);
 
   const actions = [

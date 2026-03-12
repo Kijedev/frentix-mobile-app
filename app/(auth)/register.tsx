@@ -110,7 +110,7 @@ const Register = () => {
     <SafeAreaView className="flex-1 bg-[#0A0A0A] px-6">
       <BackBtn />
 
-      <View className="items-center mt-10">
+      <View className="items-center mt-6">
         <Text className="font-inter text-white text-4xl font-bold">
           Create Your Account
         </Text>
@@ -210,7 +210,12 @@ const Register = () => {
             {authError}
           </Text>
         ) : null}
-        <TouchableOpacity onPress={handleRegister} activeOpacity={0.8} className="mt-10">
+        <TouchableOpacity
+          onPress={handleRegister}
+          activeOpacity={0.8}
+          className={`mt-10 ${(!remember || loading) ? "opacity-50" : ""}`}
+          disabled={!remember || loading}
+        >
           <LinearGradient
             colors={["#7C3AED", "#A855F7"]}
             start={{ x: 0, y: 0 }}

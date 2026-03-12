@@ -1,3 +1,4 @@
+import Chip from "@/assets/images/chip.png";
 import PatternImage from "@/assets/images/pattern.png";
 import { Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -7,6 +8,7 @@ import {
     Animated,
     Dimensions,
     GestureResponderEvent,
+    Image,
     ImageBackground,
     Keyboard,
     KeyboardAvoidingView,
@@ -54,7 +56,7 @@ const CARD_GRADIENTS = [
     // ["#3B82F6", "#2563EB"],
 ];
 
-const Bank = () => {
+const BankScreen = () => {
     const scrollX = useRef(new Animated.Value(0)).current;
 
     const swipe = useRef<Animated.ValueXY>(new Animated.ValueXY()).current;
@@ -88,12 +90,8 @@ const Bank = () => {
             try {
                 setLoadingBanks(true);
 
-                const response = await fetch(
-                    "https://api.nigerianbanklogos.xyz"
-                );
-
+                const response = await fetch("https://api.nigerianbanklogos.xyz");
                 const data: Bank[] = await response.json();
-
                 setBanks(data);
             } catch (error) {
                 console.log("Error fetching banks:", error);
@@ -340,18 +338,19 @@ const Bank = () => {
                                         <ImageBackground
                                             source={PatternImage}
                                             style={{ flex: 1, padding: 20 }}
-                                            imageStyle={{ borderRadius: 20, opacity: 0.4 }}
+                                            imageStyle={{ borderRadius: 20, opacity: 0.3 }}
                                             resizeMode="cover"
                                         >
                                             <TouchableOpacity
                                                 onPress={() => handleCardSelect(item)}
                                                 className="relative"
                                             >
-                                                <View className="flex-row gap-3 items-center">
+                                                <View className="flex-col justify-between h-full gap-3">
                                                     {banks
                                                         .filter((bank) => bank.title === item.name)
                                                         .map((bank, index) => (
                                                             <SvgUri
+                                                                key={index}
                                                                 height={32}
                                                                 width={32}
                                                                 uri={bank.route}
@@ -360,12 +359,13 @@ const Bank = () => {
 
                                                     {/* Bank Name */}
                                                     <Text className="text-white font-inter text-xl font-bold">{item.name}</Text>
+                                                    {/* Chip */}
+                                                    <Image source={Chip} style={{ width: 40, height: 30 }} resizeMode="contain" />
+                                                    {/* Card Number */}
+                                                    <Text className="text-white font-inter font-semibold mt-2">
+                                                        {maskCard(item.number)}
+                                                    </Text>
                                                 </View>
-
-                                                {/* Card Number */}
-                                                <Text className="text-white font-inter font-semibold mt-2 absolute -bottom-32">
-                                                    {maskCard(item.number)}
-                                                </Text>
                                             </TouchableOpacity>
 
                                             <TouchableOpacity
@@ -526,13 +526,13 @@ const Bank = () => {
                 animationType="slide"
                 onRequestClose={() => setModalVisible(false)}
             >
-                {/* <View className="flex-1 justify-end bg-black/50" /> */}
+                <View className="flex-1 justify-end bg-black/90" />
                 <KeyboardAvoidingView
                     style={{ flex: 1, justifyContent: "flex-end" }}
                     behavior={Platform.OS === "ios" ? "padding" : "height"}
                     keyboardVerticalOffset={Platform.OS === "ios" ? 20 : 0}
                 >
-                    <View className="bg-[#0C0C0C] rounded-t-3xl p-6 h-[50%]">
+                    <View className="bg-[#0C0C0C] rounded-t-3xl p-6 h-[100%]">
                         <View className="w-12 h-1.5 bg-gray-500 rounded-full self-center mb-4" />
                         <Text className="text-white text-lg font-semibold mb-4">
                             Add Bank Card
@@ -611,4 +611,4 @@ const Bank = () => {
     )
 }
 
-export default Bank
+export default BankScreen
