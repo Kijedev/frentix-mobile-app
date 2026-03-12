@@ -22,14 +22,15 @@ const TransactionContext = createContext<TransactionContextType | undefined>(
   undefined
 );
 
-export const TransactionProvider = ({ children }: any) => {
+export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({
+  children,
+}) => {
   const [transactions, setTransactions] = useState<TransactionType[]>([]);
   const [balance, setBalance] = useState<number>(0);
 
   const user = auth.currentUser;
   const STORAGE_KEY = user ? `BANK_APP_DATA_${user.uid}` : null;
 
-  // 🔥 Load user-specific data
   useEffect(() => {
     const loadData = async () => {
       if (!STORAGE_KEY) return;
@@ -41,7 +42,6 @@ export const TransactionProvider = ({ children }: any) => {
         setTransactions(parsed.transactions || []);
         setBalance(parsed.balance || 0);
       } else {
-        // New user starts fresh
         setTransactions([]);
         setBalance(0);
       }
@@ -50,7 +50,6 @@ export const TransactionProvider = ({ children }: any) => {
     loadData();
   }, [STORAGE_KEY]);
 
-  // 🔥 Save user-specific data
   useEffect(() => {
     const saveData = async () => {
       if (!STORAGE_KEY) return;
@@ -98,6 +97,7 @@ export const TransactionProvider = ({ children }: any) => {
   );
 };
 
+// ✅ Hook to use transactions
 export const useTransactions = () => {
   const context = useContext(TransactionContext);
   if (!context) {

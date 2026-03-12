@@ -7,6 +7,7 @@ import * as SplashScreen from "expo-splash-screen";
 import { StatusBar } from 'expo-status-bar';
 import { useEffect, useState } from 'react';
 import { TransactionProvider } from './context/TransactionContext';
+import { NotificationProvider } from './context/NotificationContext';
 
 SplashScreen.preventAutoHideAsync();
 
@@ -47,25 +48,29 @@ export default function RootLayout() {
         return null;
     }
 
+
+
     return (
         <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
             <TransactionProvider>
-                <Stack
-                    screenOptions={{
-                        headerShown: false,
-                    }}
-                >
-                    {!hasAccount ? (
-                        <Stack.Screen name="(onboarding)" />
-                    ) : (
-                        <>
-                            <Stack.Screen name="(tabs)" />
-                            <Stack.Screen name="(auth)" />
-                        </>
-                    )}
+                <NotificationProvider>
+                    <Stack
+                        screenOptions={{
+                            headerShown: false,
+                        }}
+                    >
+                        {!hasAccount ? (
+                            <Stack.Screen name="(onboarding)" />
+                        ) : (
+                            <>
+                                <Stack.Screen name="(tabs)" />
+                                <Stack.Screen name="(auth)" />
+                            </>
+                        )}
 
-                    <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
-                </Stack>
+                        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+                    </Stack>
+                </NotificationProvider>
             </TransactionProvider>
 
             <StatusBar style="light" />

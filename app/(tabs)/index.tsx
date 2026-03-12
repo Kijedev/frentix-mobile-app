@@ -1,10 +1,11 @@
 import { useTransactions } from "@/app/context/TransactionContext";
 import "@/app/global.css";
+import { NotifyBell } from "@/components/Notifications/NotifyBell";
 import ProfileHint from "@/components/ProfileHint";
+import { requestNotificationPermission } from '@/services/notifications';
 import { Feather, Ionicons } from "@expo/vector-icons";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { LinearGradient } from "expo-linear-gradient";
-import * as Notifications from "expo-notifications";
 import { router } from "expo-router";
 import React, { useEffect, useState } from "react";
 import {
@@ -24,6 +25,11 @@ export default function Home() {
   const { transactions, balance } = useTransactions();
   const [showHint, setShowHint] = useState(false);
   const [image, setImage] = useState<string | null>(null);
+
+  // Notifications permission
+  useEffect(() => {
+    requestNotificationPermission();
+  }, []);
 
   useEffect(() => {
     loadImage();
@@ -85,17 +91,17 @@ export default function Home() {
   }, []);
 
   // Notifications
-  useEffect(() => {
-    const requestPermission = async () => {
-      const { status } = await Notifications.requestPermissionsAsync();
+  // useEffect(() => {
+  //   const requestPermission = async () => {
+  //     const { status } = await Notifications.requestPermissionsAsync();
 
-      if (status !== "granted") {
-        alert("Permission for notifications not granted!");
-      }
-    };
+  //     if (status !== "granted") {
+  //       alert("Permission for notifications not granted!");
+  //     }
+  //   };
 
-    requestPermission();
-  }, []);
+  //   requestPermission();
+  // }, []);
 
   const actions = [
     {
@@ -154,13 +160,14 @@ export default function Home() {
             </View>
           </View>
 
-          <TouchableOpacity className="bg-black/10 p-3 rounded-full">
+          {/* <TouchableOpacity onPress={(() => router.push("/../components/Notifications/notify"))} className="bg-black/10 p-3 rounded-full">
             <Ionicons
               name="notifications-outline"
               size={18}
               color="#fff"
             />
-          </TouchableOpacity>
+          </TouchableOpacity> */}
+          <NotifyBell />
         </View>
 
         <View className="mt-6 items-center">
@@ -170,7 +177,7 @@ export default function Home() {
 
           <View className="flex-row items-center mt-2">
             <Text className="font-inter text-white text-4xl font-bold mr-3">
-              {isHidden ? "****" : balance.toLocaleString()}
+              {isHidden ? "****" : `₦ ${balance.toLocaleString()}`}
             </Text>
 
             <TouchableOpacity onPress={() => setIsHidden(!isHidden)}>
@@ -198,7 +205,7 @@ export default function Home() {
                 Income
               </Text>
               <Text className="font-inter text-white font-semibold text-xl">
-                $0.00
+                ₦0.00
               </Text>
             </View>
           </View>
@@ -212,7 +219,7 @@ export default function Home() {
                 Expense
               </Text>
               <Text className="font-inter text-white font-semibold text-xl">
-                $0.00
+                ₦0.00
               </Text>
             </View>
           </View>

@@ -1,4 +1,8 @@
-declare module "*.png";
-declare module "*.jpg";
-declare module "*.jpeg";
-declare module "*.svg";
+const images = {
+    "*.png": "",
+    "*.jpg": "",
+    "*.jpeg": "",
+    "*.svg": "",
+}
+
+export default images;
