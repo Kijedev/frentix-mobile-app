@@ -97,7 +97,6 @@ export const TransactionProvider: React.FC<{ children: React.ReactNode }> = ({
   );
 };
 
-// ✅ Hook to use transactions
 export const useTransactions = () => {
   const context = useContext(TransactionContext);
   if (!context) {

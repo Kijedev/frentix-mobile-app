@@ -72,7 +72,7 @@ export default function PayScreen() {
                 <TouchableOpacity
                     onPress={handlePay}
                     activeOpacity={0.8}
-                    className="mt-8"
+                    className="mt-8 mb-8"
                 >
                     <LinearGradient
                         colors={["#7C3AED", "#A855F7"]}

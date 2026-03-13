@@ -1,12 +1,21 @@
 import BackBtn from '@/components/BackBtn'
+import AppAlert from "@/components/ui/Alert"
+import { Ionicons } from '@expo/vector-icons'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { router } from 'expo-router'
+import { deleteUser, getAuth } from "firebase/auth"
 import React, { useEffect, useState } from 'react'
-import { Alert, Text, TouchableOpacity, View } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 
 const AccountScreen = () => {
   const [fullname, setFullName] = useState("")
   const [email, setEmail] = useState("")
+  const [alertVisible, setAlertVisible] = useState(false);
+  const [alertTitle, setAlertTitle] = useState("");
+  const [alertMessage, setAlertMessage] = useState("");
+  const [alertType, setAlertType] = useState<"success" | "error" | "warning">("success");
+  const [showDeleteAlert, setShowDeleteAlert] = useState(false);
 
   useEffect(() => {
     const loadName = async () => {
@@ -24,12 +33,33 @@ const AccountScreen = () => {
     loadEmail();
   }, []);
 
-  const handleDelete = () => {
-    Alert.alert('Are you sure?', 'This action cannot be undone', [
-      { text: 'Cancel', style: 'cancel' },
-      { text: 'Delete', style: 'destructive' },
-    ])
-  }
+  const handleDeleteAccount = async () => {
+    try {
+      const auth = getAuth();
+      const user = auth.currentUser;
+
+      if (!user) return;
+
+      // delete user from firebase auth
+      await deleteUser(user);
+
+      // clear local storage
+      await AsyncStorage.clear();
+
+      // close alert
+      setShowDeleteAlert(false);
+
+      // redirect to login
+      router.replace("/login");
+
+    } catch (error: any) {
+      console.log("Delete account error:", error);
+
+      if (error.code === "auth/requires-recent-login") {
+        alert("Please log out and log in again before deleting your account.");
+      }
+    }
+  };
 
   return (
     <SafeAreaView className='bg-[#0C0C0C] flex-1'>
@@ -55,11 +85,27 @@ const AccountScreen = () => {
         <View className='bg-white/10 h-px w-full mt-5' />
       </View>
 
-      <TouchableOpacity onPress={handleDelete} className='px-4 mt-5'>
-        <Text className='text-red-600 font-inter text-xl'>Delete Account</Text>
+      <TouchableOpacity
+        onPress={() => setShowDeleteAlert(true)}
+        className="bg-red-500/10 mx-4 py-4 px-4 rounded-xl flex-row items-center justify-center mt-6"
+      >
+        <Ionicons name="trash-outline" size={20} color="#ef4444" />
+        <Text className="text-red-500 font-inter ml-2">Delete Account</Text>
       </TouchableOpacity>
+
+      <AppAlert
+        visible={showDeleteAlert}
+        type="warning"
+        title="Delete Account"
+        message="Are you sure you want to delete your account? This action cannot be undone."
+        cancelText="Cancel"
+        confirmText="Delete"
+        onCancel={() => setShowDeleteAlert(false)}
+        onConfirm={handleDeleteAccount}
+      />
     </SafeAreaView>
   )
 }
+
 
 export default AccountScreen

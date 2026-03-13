@@ -1,4 +1,4 @@
-import { useColorScheme } from '@/hooks/use-color-scheme';
+// import { useColorScheme } from '@/hooks/use-color-scheme';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
 import { useFonts } from 'expo-font';
@@ -12,7 +12,7 @@ import { TransactionProvider } from './context/TransactionContext';
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
-    const colorScheme = useColorScheme();
+    // const colorScheme = useColorScheme();
     const [loading, setLoading] = useState(true);
     const [hasAccount, setHasAccount] = useState(false);
 
@@ -49,7 +49,7 @@ export default function RootLayout() {
     }
 
     return (
-        <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+        <ThemeProvider value={DarkTheme}>
             <NotificationProvider>
                 <TransactionProvider>
                     <Stack
