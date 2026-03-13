@@ -24,7 +24,6 @@ import {
     View,
     ViewStyle
 } from "react-native";
-import { SvgUri } from "react-native-svg";
 
 const { width } = Dimensions.get("window");
 const CARD_WIDTH = width * 0.8;
@@ -42,8 +41,10 @@ type Bank = {
     id: string;
     order: number;
     title: string;
+    name: string;
     categories: string[];
     route: string;
+    slug: string;
     url: string;
     ticker: string;
 };
@@ -90,7 +91,7 @@ const BankScreen = () => {
             try {
                 setLoadingBanks(true);
 
-                const response = await fetch("https://api.nigerianbanklogos.xyz");
+                const response = await fetch("https://supermx1.github.io/nigerian-banks-api/data.json");
                 const data: Bank[] = await response.json();
                 setBanks(data);
             } catch (error) {
@@ -313,8 +314,6 @@ const BankScreen = () => {
                                 width: "100%",
                                 height: 180,
                                 top: index * 12,
-                                // left: index * 16,
-                                // right: index * 16,
                                 borderRadius: 20,
                                 zIndex: cards.length - index,
                             };
@@ -349,11 +348,12 @@ const BankScreen = () => {
                                                     {banks
                                                         .filter((bank) => bank.title === item.name)
                                                         .map((bank, index) => (
-                                                            <SvgUri
-                                                                key={index}
-                                                                height={32}
-                                                                width={32}
-                                                                uri={bank.route}
+                                                            <Image
+                                                                style={{ width: 32, height: 32 }}
+                                                                resizeMode="contain"
+                                                                source={{
+                                                                    uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                                }}
                                                             />
                                                         ))}
 
@@ -436,18 +436,20 @@ const BankScreen = () => {
                                         <TouchableOpacity
                                             key={index}
                                             onPress={() => {
-                                                setSelectedBank(bank.title);
+                                                setSelectedBank(bank.name);
                                                 setShowBanks(false);
                                             }}
                                             className="px-4 py-3 flex-row gap-4 items-center border-b border-[#2A2A2A]"
                                         >
-                                            <SvgUri
-                                                height={32}
-                                                width={32}
-                                                uri={bank.route}
+                                            <Image
+                                                style={{ width: 32, height: 32 }}
+                                                resizeMode="contain"
+                                                source={{
+                                                    uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                }}
                                             />
 
-                                            <Text className="text-white">{bank.title}</Text>
+                                            <Text className="text-white">{bank.name}</Text>
                                         </TouchableOpacity>
                                     ))}
                                 </ScrollView>
@@ -480,7 +482,6 @@ const BankScreen = () => {
                     </View>
 
                     {/* AMOUNT */}
-
                     <Text className="font-inter text-white mb-4 mt-6">
                         Amount
                     </Text>
@@ -519,6 +520,8 @@ const BankScreen = () => {
                     </LinearGradient>
                 </TouchableOpacity>
             </KeyboardAvoidingView>
+
+            {/* Modal */}
 
             <Modal
                 transparent
@@ -560,17 +563,19 @@ const BankScreen = () => {
                                             <TouchableOpacity
                                                 key={index}
                                                 onPress={() => {
-                                                    setNewBank(bank.title);
+                                                    setNewBank(bank.name);
                                                     setShowBanks(false);
                                                 }}
                                                 className="px-4 py-3 flex-row gap-4 items-center border-b border-[#2A2A2A]"
                                             >
-                                                <SvgUri
-                                                    height={32}
-                                                    width={32}
-                                                    uri={bank.route}
+                                                <Image
+                                                    style={{ width: 32, height: 32 }}
+                                                    resizeMode="contain"
+                                                    source={{
+                                                        uri: `https://supermx1.github.io/nigerian-banks-api/logos/${bank.slug}.png`
+                                                    }}
                                                 />
-                                                <Text className="text-white">{bank.title}</Text>
+                                                <Text className="text-white">{bank.name}</Text>
                                             </TouchableOpacity>
                                         ))}
                                     </ScrollView>
@@ -579,15 +584,19 @@ const BankScreen = () => {
                         </View>
 
                         <Text className="text-white mb-2 mt-4">Card Number</Text>
-                        <TextInput
-                            value={newCardNumber}
-                            onChangeText={(text) =>
-                                setNewCardNumber(formatCardNumber(text))
-                            }
-                            placeholder='Card Number'
-                            keyboardType="numeric"
-                            className="bg-[#181818] text-white rounded-xl px-4 py-3 mb-4"
-                        />
+                        <View className="flex-row items-center bg-[#181818] rounded-xl px-4 py-3 mb-4">
+                            <Ionicons name="card-outline" size={18} color="#888" />
+                            <TextInput
+                                value={newCardNumber}
+                                onChangeText={(text) =>
+                                    setNewCardNumber(formatCardNumber(text))
+                                }
+                                placeholder='Card Number'
+                                placeholderTextColor="#fff"
+                                keyboardType="numeric"
+                                className="text-white ml-3 flex-1 py-2"
+                            />
+                        </View>
 
                         <View className="flex-row justify-end gap-4 mt-2">
                             <TouchableOpacity

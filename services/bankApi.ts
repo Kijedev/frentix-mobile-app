@@ -3,12 +3,13 @@ export type Bank = {
   order: number;
   title: string;
   categories: string[];
-  route: string; // SVG logo URL
+  route: string;
   url: string;
   ticker: string;
 };
 
-const BASE_URL = "https://api.nigerianbanklogos.xyz";
+// const BASE_URL = "https://api.nigerianbanklogos.xyz";
+const BASE_URL = "https://supermx1.github.io/nigerian-banks-api/data.json";
 
 /* GET ALL BANKS */
 export const getBanks = async (): Promise<Bank[]> => {
