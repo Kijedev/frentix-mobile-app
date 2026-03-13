@@ -1,5 +1,6 @@
 import { useNotifications } from "@/app/context/NotificationContext";
 import { useTransactions } from "@/app/context/TransactionContext";
+import BackBtn from "@/components/BackBtn";
 import * as Haptics from "expo-haptics";
 import { LinearGradient } from "expo-linear-gradient";
 import * as Notifications from "expo-notifications";
@@ -57,6 +58,9 @@ export default function PayScreen() {
             className="flex-1"
         >
             <ScrollView contentContainerStyle={{ flexGrow: 1 }} className="p-6 bg-[#0A0A0A]">
+                <View className="mt-3">
+                    <BackBtn />
+                </View>
                 <View className="flex-1 justify-center items-center">
                     <TextInput
                         keyboardType="numeric"

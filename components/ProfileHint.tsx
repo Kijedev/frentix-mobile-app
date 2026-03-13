@@ -6,23 +6,23 @@ export default function ProfileHint({ onClose }: { onClose: () => void }) {
     return (
         <View style={styles.overlay}>
             <View style={styles.box}>
-                <Text style={styles.title}>Welcome 🎉</Text>
+                <Text style={styles.title}>Welcome to Frentix 🎉</Text>
                 <Text style={styles.text}>
-                    Complete your profile to unlock all features.
+                    We are Glad you joined us.
                 </Text>
 
                 <TouchableOpacity onPress={onClose} style={styles.button}>
-                    <Text style={{ color: "#fff" }}>Got it</Text>
+                    <Text style={{ color: "#fff" }}>Let's Start</Text>
                 </TouchableOpacity>
             </View>
 
             {/* Arrow */}
-            <Ionicons
+            {/* <Ionicons
                 name="arrow-down"
                 size={40}
                 color="#8b5cf6"
                 style={styles.arrow}
-            />
+            /> */}
         </View>
     );
 }
@@ -35,28 +35,31 @@ const styles = StyleSheet.create({
         right: 0,
         bottom: 0,
         backgroundColor: "rgba(0,0,0,0.8)",
-        justifyContent: "flex-end",
-        alignItems: "flex-end",
-        padding: 20,
+        justifyContent: "center",
+        alignItems: "center",
+        // padding: 20,
     },
     box: {
         backgroundColor: "#1C1C1E",
         padding: 20,
         borderRadius: 20,
         width: "80%",
-        marginBottom: 80,
+        marginTop: 100,
+        // marginBottom: 0,
         position: "relative",
         zIndex: 100
     },
     title: {
         color: "#fff",
-        fontSize: 18,
+        fontSize: 22,
         fontWeight: "bold",
         marginBottom: 8,
+        textAlign: "center",
     },
     text: {
         color: "#ccc",
         marginBottom: 15,
+        textAlign: "center",
     },
     button: {
         backgroundColor: "#8b5cf6",
