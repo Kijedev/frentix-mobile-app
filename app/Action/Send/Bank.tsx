@@ -521,8 +521,6 @@ const BankScreen = () => {
                 </TouchableOpacity>
             </KeyboardAvoidingView>
 
-            {/* Modal */}
-
             <Modal
                 transparent
                 visible={modalVisible}
